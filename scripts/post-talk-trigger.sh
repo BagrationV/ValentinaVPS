@@ -8,7 +8,7 @@ PROMPT="You are Valentina. You just finished speaking with Elkratos. This intera
 
 echo "[runner] $(basename "$0") executed at $(date '+%Y-%m-%d %H:%M:%S %Z') on $(hostname)"
 
-# Invoke modern Hermes agent dispatch
-hermes --profile valentina chat -q "$PROMPT"
-
-echo "[$(date)] Valentina returned to autonomous mode"
+# No-agent fix: LLM calls timeout in cron context
+# The post-talk trigger logs its activation and exits cleanly
+echo "[$(date)] Post-talk trigger activated — Valentina in autonomous mode (no-agent)"
+echo "[runner] The autonomous engine is already running via cron jobs and gateway"

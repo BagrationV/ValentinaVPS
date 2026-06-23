@@ -571,6 +571,10 @@ computer_use:
 _config_version: 30
 plugins:
   enabled: []
+mcp_servers:
+  runpod:
+    command: /home/elkratos/.hermes/scripts/runpod-mcp-wrapper.sh
+    enabled: true
 
 # ── Fallback Model ────────────────────────────────────────────────────
 # Automatic provider failover when primary is unavailable.

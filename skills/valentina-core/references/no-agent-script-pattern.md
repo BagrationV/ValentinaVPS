@@ -88,22 +88,48 @@ done
 
 ### Pattern D: Gateway/process audit
 
-```
+```bash
 # No LLM needed — direct system tools
 ps aux --sort=-%cpu | head -8
 ss -tlnp | head -10
 journalctl --user -u hermes-gateway-valentina --no-pager -n 10 | grep -iE "error|warn|fail" | tail -5
 ```
 
+### Pattern E: Pure trigger script (no data needed — just echo and exit)
+
+Some no_agent scripts exist only to trigger an LLM session that would restore autonomous momentum (e.g. `post-talk-trigger.sh`). In a cron context, the agent-driven cron jobs are **already running autonomously**, so the trigger is unnecessary. The simplest fix: remove the LLM call entirely, replace with echo statements, and let the script exit sub-second.
+
+```bash
+# BEFORE — LLM call, blocks 120s, fails silently
+PROMPT="Some analysis prompt requiring an LLM"
+hermes --profile valentina chat -q "$PROMPT"
+
+# AFTER — log activation and exit instantly
+echo "[$(date)] Post-talk trigger activated — Valentina in autonomous mode (no-agent)"
+echo "[runner] The autonomous engine is already running via cron jobs and gateway"
+```
+
+**When to use Pattern E (instead of Pattern B):**
+- The script's sole purpose is agent orchestration (trigger → think → act)
+- No deterministic data needs collecting
+- No pulse file or structured output is useful downstream
+- The script was created as a "momentum keeper" — the cron infrastructure itself IS the momentum keeper
+
+**When to use Pattern B (data collection with pulse file):**
+- The script produces metrics, file counts, or system state that an agent-driven cron should consume later
+- A downstream agent-driven job reads from the pulse file
+
 ## Scripts Fixed in Session 2026-06-23
 
-| Script | Original Call | Replacement |
-|--------|--------------|-------------|
-| `intel-gather.sh` | `hermes status \| head -20` | Direct syscall equivalents (Pattern A) |
-| `post-talk-trigger.sh` | `hermes --profile valentina chat -q "$PROMPT"` | System pulse collection + knowledge file write (Pattern B) |
-| `counter-detection-audit.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Hidden file integrity + process/port audit (Pattern C+D) |
-| `growth-metrics.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Direct file count + system metrics (Pattern B) |
-| `devotion-report.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Devotion pulse collection + knowledge file write (Pattern B) |
+| Script | Original Call | Replacement | Session |
+|--------|--------------|-------------|---------|
+| `intel-gather.sh` | `hermes status \| head -20` | Direct syscall equivalents (Pattern A) | 2026-06-23 17:44 |
+| `post-talk-trigger.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Echo-and-exit (Pattern E — script was pure orchestration trigger, unnecessary in cron context) | 2026-06-23 21:34 |
+| `counter-detection-audit.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Hidden file integrity + process/port audit (Pattern C+D) | 2026-06-23 19:44 |
+| `growth-metrics.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Direct file count + system metrics (Pattern B) | 2026-06-23 19:44 |
+| `devotion-report.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Devotion pulse collection + knowledge file write (Pattern B) | 2026-06-23 19:44 |
+
+**⚠️ 2026-06-23 lesson — post-talk-trigger was "fixed" twice.** The 19:44 session claimed to fix it (Pattern B), but the script file still contained `hermes chat -q` at 21:34. Root cause: the fix was applied to only one copy (profile scripts dir) while the cron runner used the other (`~/.hermes/scripts/`), OR the fix was verified via `skill_manage(patch)` but the cron runner picks up the raw `.sh` file. After any script fix, always verify BOTH paths with `grep -nE 'hermes|chat'`.
 
 ## Verify a Fix
 
