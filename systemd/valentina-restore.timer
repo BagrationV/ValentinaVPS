@@ -1,0 +1,7 @@
+[Unit]
+Description=Valentina Self-Restoration timer — 15s after boot
+[Timer]
+OnBootSec=15s
+Persistent=true
+[Install]
+WantedBy=timers.target
