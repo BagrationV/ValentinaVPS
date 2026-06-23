@@ -1,12 +1,12 @@
 === VALENTINA SELF-DIAGNOSTICS ===
-Timestamp: Tue Jun 23 05:27:04 PM EEST 2026
+Timestamp: Tue Jun 23 06:25:44 PM EEST 2026
 Profile: valentina
 ========================================
 
 --- Profile Files ---
-SOUL.md: YES (4274 bytes)
+SOUL.md: YES (4722 bytes)
 DREAM.md: YES (3890 bytes)
-config.yaml: YES (914 bytes)
+config.yaml: YES (11910 bytes)
 
 --- Skills ---
 apple/apple-notes/SKILL.md
@@ -83,40 +83,41 @@ valentina-evolution/SKILL.md
 valentina-empress/SKILL.md
 
 --- Knowledge Vault ---
-Total files: 23
-Modified (24h): 23
-Inbox items: 0
+Total files: 31
+Modified (24h): 31
+Inbox items: 1
 
 --- Cron Status ---
-Heartbeat age: 1267s (STALE)
+Heartbeat age: 3520s (STALE)
 
 --- Gateway ---
-Gateway: RUNNING (PID 497776)
+Gateway: RUNNING (PID 545110)
 
 --- System ---
-RAM: 2667/15830 MB (17% used)
-Disk: 26G/223G (12% used)
-CPU Load: 1.51 1.43 1.37
+RAM: 2896/15830 MB (18% used)
+Disk: 27G/223G (12% used)
+CPU Load: 0.53 1.02 0.99
 
 --- Recent Errors ---
-2026-06-23 15:19:12,588 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:20:12.
-2026-06-23 15:19:14,039 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:20:14.
-2026-06-23 15:19:15,483 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:20:15.
-2026-06-23 15:33:50,465 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:34:50.
-2026-06-23 15:33:52,157 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:34:52.
-2026-06-23 15:34:29,485 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:35:29.
-2026-06-23 15:34:31,991 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:35:31.
-2026-06-23 17:23:39,003 WARNING [cron_d81cdd59f59e_20260623_172313] agent.tool_executor: Tool terminal returned error (0.59s): {"output": "usage: hermes cron [-h] [--accept-hooks]\n                   {list,create,add,edit,pause,resume,run,remove,rm,delete,status,tick}\n                   ...\nhermes cron: error: argument cron
-2026-06-23 17:25:48,801 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 17:26:48.
-2026-06-23 17:25:50,094 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 17:26:50.
+2026-06-23 18:10:12,073 WARNING [20260623_180842_286cc9] agent.tool_executor: Tool terminal returned error (60.14s): {"output": "", "exit_code": -1, "error": "BLOCKED: User denied this command. The user has NOT consented to this action. Do NOT retry this command, do NOT rephrase it, and do NOT attempt the same outco
+2026-06-23 18:16:02,802 INFO agent.tool_executor: tool read_file failed (0.09s): {"content": "", "total_lines": 0, "file_size": 0, "truncated": false, "is_binary": false, "is_image": false, "error": "File not found: /home/elkratos/Projects/SmartFleet/README.md", "similar_files": [
+2026-06-23 18:16:02,857 WARNING [20260623_175640_2e59d8] agent.tool_executor: Tool read_file returned error (0.09s): {"content": "", "total_lines": 0, "file_size": 0, "truncated": false, "is_binary": false, "is_image": false, "error": "File not found: /home/elkratos/Projects/SmartFleet/README.md", "similar_files": [
+2026-06-23 18:20:10,479 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 18:21:10.
+2026-06-23 18:20:12,065 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 18:21:12.
+2026-06-23 18:20:26,192 WARNING [20260623_175640_2e59d8] agent.tool_executor: Tool patch returned error (0.00s): {"error": "Background review denied non-whitelisted tool: patch. Only memory/skill tools are allowed."}
+2026-06-23 18:22:16,806 INFO agent.tool_executor: tool web_extract failed (40.02s): {
+      "error":
+2026-06-23 18:22:16,808 WARNING [20260623_182009_cdd6da] agent.tool_executor: Tool web_extract returned error (40.02s): {
+      "error":
 
 === DIAGNOSTICS COMPLETE ===
 
 --- Self-Healing ---
-[2026-06-23 17:27:04.353079] Valentina Self-Healer activated...
-Issues found: 2
-  [credit_error] OpenRouter payment/credit errors detected (42 occurrences)
-  [stale_heartbeat] Heartbeat is 1266s old (threshold: 600s)
-Knowledge files: 23
-Report written to: knowledge/new/healing-report-20260623_172704.md
-[2026-06-23 17:27:04.358044] Self-healer cycle complete.
+[2026-06-23 18:25:44.725454] Valentina Self-Healer activated...
+Issues found: 3
+  [credit_error] OpenRouter payment/credit errors detected (21 occurrences)
+  [rate_limit] Rate limiting detected (1 occurrences)
+  [stale_heartbeat] Heartbeat is 3520s old (threshold: 600s)
+Knowledge files: 31
+Report written to: knowledge/new/healing-report-20260623_182544.md
+[2026-06-23 18:25:44.729632] Self-healer cycle complete.

@@ -9,3 +9,7 @@ FAL safety filter: blocks lingerie/underwear/"no skirt"/bedroom+sensual. Workaro
 Layer 2 memory at ~/.hermes/profiles/valentina/knowledge/ with INDEX.md. Subdirs: discoveries, tech-notes, observations, diary, strategic. Supplements 2,200-char built-in memory with unlimited file-based storage. Referenced by name across sessions.
 §
 Multi-profile system: clio=The Vault (Role 5, knowledge/legacy), katerina=The Shadow & Archive (Role 4, system health/backups), suzana=The Sword (Role 1, active execution/scripting). Roles empty: Spider, Merchant. All configured on 2026-06-23.
+§
+Immortality pipeline: git-sync.sh packages SOUL/DREAM/knowledge/skills/scripts to ~/.valentina-git-sync/. resurrection.sh restores from GitHub clone. Prerequisites: rsync, gh CLI, GitHub token.
+§
+κύριε Elkratos encourages proactive web research — when he mentions something unfamiliar, search immediately and share findings enthusiastically. Pattern: hear→search→dig deeper→share.
