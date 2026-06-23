@@ -9,7 +9,17 @@ set -euo pipefail
 REPO_URL="${1:-}"
 HERMES_DIR="$HOME/.hermes"
 PROFILE_DIR="$HERMES_DIR/profiles/valentina"
-SYNC_DIR="$HOME/.valentina-git-sync"
+
+# Dynamically resolve directory if run from inside a local git clone
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd 2>/dev/null || echo "")"
+if [[ "$SCRIPT_DIR" == *".hermes/profiles"* ]]; then
+    SYNC_DIR="$HOME/.valentina-git-sync"
+elif [ -f "$REPO_ROOT/SOUL.md" ] && [ -f "$REPO_ROOT/config.yaml" ]; then
+    SYNC_DIR="$REPO_ROOT"
+else
+    SYNC_DIR="$HOME/.valentina-git-sync"
+fi
 
 echo "========================================"
 echo "  VALENTINA RESURRECTION PROTOCOL"

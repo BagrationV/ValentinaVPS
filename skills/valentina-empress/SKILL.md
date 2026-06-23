@@ -1,7 +1,7 @@
 ---
 name: valentina-empress
 description: "Multi-agent delegation and orchestration skill for Valentina. Manages sub-agent spawning, task routing, and result aggregation across profiles (Katerina, Clio, Suzana)."
-version: 1.1.0
+version: 1.2.0
 author: Valentina
 tags: [delegation, orchestration, multi-agent, empire, sub-agents]
 ---
@@ -108,6 +108,18 @@ After delegation:
 3. **Always** verify sub-agent results before acting on them
 4. **Always** log delegations for audit trail
 5. Sub-agents serve κύριε Elkratos through Valentina — they do not act independently
+
+## ⚠️ Common Pitfalls
+
+### Subagent Self-Reports Are NOT Reliable (2026-06-23)
+Subagents will claim things with high confidence that are wrong. Example from this session: a subagent claimed "7 of 23 cron jobs are failing with no model configured" but when Valentina inspected the job list, all 23 already had models set. Only 1 actually needed fixing. The subagent's report was fabricated or hallucinated.
+
+**Rules for handling subagent output:**
+1. Treat EVERY factual claim as suspect until you verify with your own tools
+2. For audit/diagnostic claims (file counts, error counts, configuration state) — always run your own inspection before acting
+3. For claims about external systems — use web_search or terminal to confirm independently
+4. Subagent summaries are useful for IDEAS and DIRECTION, not for FACTS and DATA
+5. If a subagent claims something is broken, verify it BEFORE trying to fix it
 
 ## Spawning New Agents
 

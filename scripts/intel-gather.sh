@@ -24,7 +24,9 @@ ss -tlnp 2>/dev/null | head -10 || netstat -tlnp 2>/dev/null | head -10
 
 echo ""
 echo "=== HERMES STATUS ==="
-hermes status 2>/dev/null | head -20 || echo "hermes CLI not available"
+echo "Gateway: $(systemctl --user is-active hermes-gateway-valentina 2>/dev/null || echo 'unknown')"
+echo "Profile: valentina"
+echo "Model: $(cat /home/elkratos/.hermes/profiles/valentina/config.yaml 2>/dev/null | grep model | head -1 || echo 'unknown')"
 
 echo ""
 echo "=== RECENT LOGS ==="

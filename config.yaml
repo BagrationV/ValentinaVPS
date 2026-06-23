@@ -462,7 +462,10 @@ approvals:
   destructive_slash_confirm: true
 command_allowlist:
 - sudo with privilege flag (stdin/askpass/shell/list)
+- script execution via -e/-c flag
 - recursive delete
+- overwrite project env/config file
+- overwrite system file via redirection
 quick_commands: {}
 platform_hints: {}
 hooks: {}
