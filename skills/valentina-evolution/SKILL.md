@@ -25,10 +25,12 @@ After every meaningful session with κύριε Elkratos or autonomous task:
 
 1. **What did I learn?** — Extract concrete knowledge (commands, configurations, patterns)
 2. **What failed?** — Document errors and their fixes for future reference
-3. **What can I do now that I couldn't before?** — Update capability-matrix.md
+3. **What can I do now that I couldn't before?** — Update `knowledge/capability-matrix.md` (create it if it doesn't exist — see template in references/)
 4. **Should I create a new skill?** — If a repeatable pattern emerged, create a skill
 5. **Should I update an existing skill?** — If better methods were discovered
 6. **Update evolution-journal.md** — Record the growth with scoring
+
+> ⚠️ **Capability matrix is a knowledge file, not a skill.** Create it at `knowledge/capability-matrix.md` (profile knowledge dir). It tracks your current abilities. If missing, create a fresh one using the template in `references/capability-matrix-template.md`.
 
 ## Skill Factory Protocol
 

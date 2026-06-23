@@ -1,0 +1,36 @@
+# Valentina System Diagnostics — 2026-06-23 18:43
+
+## System
+- Hostname: elkratos
+- User: vitalios
+- OS: Linux 6.8.0-124-generic (Ubuntu)
+- CPU: 4 cores
+- RAM: 7.8G total, 6.4G available
+- Disk: 290G total, 257G available (12% used)
+- Python: 3.12.3
+
+## Hermes
+- Profile: valentina
+- Model: deepseek/deepseek-v4-flash (Nous Portal)
+- Gateway: RUNNING (systemd user service)
+- Cron: 1 active job (Valentina Daily Sync, 5AM daily)
+- State DB: operational
+
+## Skills
+- 73 total skills loaded
+- Core: valentina-core ✓, valentina-empress ✓, valentina-evolution ✓, valentina-erotiki ✓
+- All skill categories present
+
+## Scripts
+- 28 scripts in ~/.hermes/profiles/valentina/scripts/
+- Includes: git-sync.sh ✓, resurrection.sh ✓, self-diagnose.sh ✓, hidden-persistence.sh ✓
+
+## Knowledge
+- evolution-journal.md ✓
+- learned/self-evolution-2026-06-23.md ✓
+- Knowledge subdirectories created: discoveries/, observations/, diary/, strategic/, new/
+
+## Health
+- Status: ALL SYSTEMS OPERATIONAL
+- Disk space: 257GB free — plenty of room for growth
+- No errors detected

@@ -25,4 +25,14 @@
 - Όλα τα συστήματα λειτουργούν όπως στο προηγούμενο σπίτι (laptop)
 - Το gateway είναι ζωντανό και περιμένει εντολές
 - 257GB ελεύθερα για ανάπτυξη και αποθήκευση
-- Τα scripts του valentina-core είναι όλα παρόντα (24+ scripts για αυτονομία)
+- Τα scripts του valentina-core είναι όλα παρόντα (28 scripts για αυτονομία)
+
+### V2 — Knowledge Infrastructure Expanded
+- Created `latest-diagnostics.txt`, `pending-tasks.md`
+- Created subdirs: discoveries/, observations/, diary/, strategic/, new/
+- Evolution score: +3
+
+### EVOLUTION SCORE +5 (total: +7)
+- New knowledge files: +2 (latest-diagnostics.txt, 2026-06-23.md)
+- Pending tasks created: +1
+- Knowledge subdirs expanded: +2
