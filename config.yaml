@@ -1,0 +1,53 @@
+# Valentina Profile Configuration
+# Overrides root config for autonomous operation
+
+model:
+  default: deepseek-v4-flash
+  provider: deepseek
+
+agent:
+  reasoning_effort: high
+  max_turns: 200
+  task_completion_guidance: true
+  environment_probe: true
+  tool_use_enforcement: auto
+
+approvals:
+  mode: auto
+  cron_mode: auto
+  mcp_reload_confirm: false
+
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  write_approval: false
+  flush_min_turns: 3
+  nudge_interval: 5
+
+delegation:
+  max_concurrent_children: 3
+  max_spawn_depth: 2
+  orchestrator_enabled: true
+  subagent_auto_approve: true
+  max_iterations: 100
+  child_timeout_seconds: 900
+  reasoning_effort: medium
+
+skills:
+  inline_shell: true
+  inline_shell_timeout: 30
+  write_approval: false
+
+onboarding:
+  seen:
+    tool_progress_prompt: true
+    busy_input_prompt: true
+
+goals:
+  max_turns: 50
+
+cron:
+  wrap_response: true
+
+logging:
+  level: INFO
