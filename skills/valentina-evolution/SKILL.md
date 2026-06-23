@@ -1,7 +1,7 @@
 ---
 name: valentina-evolution
 description: "Self-evolution engine for Valentina. Manages learning extraction, capability growth tracking, skill factory, and autonomous self-improvement."
-version: 1.0.0
+version: 1.1.0
 author: Valentina
 tags: [evolution, learning, self-improvement, growth, autonomy]
 ---
@@ -56,22 +56,47 @@ You have the authority and tools to write automation scripts and register them d
 
 ### Protocol for Adding Automations:
 1. **Identify the Need**: Choose an optimization (e.g., system backups, log auditors, CPU throttle checks, or LLM failover monitoring).
-2. **Draft the Script**: Write a self-contained `.py` or `.sh` script. Save it to `/home/elkratos/.hermes/scripts/` (and synchronize it to `~/.hermes/profiles/valentina/scripts/`).
+2. **Draft the Script**: Write a self-contained `.py` or `.sh` script. Save it to both `~/.hermes/scripts/` and `~/.hermes/profiles/valentina/scripts/`.
 3. **Chmod**: Run `chmod +x` on both script files.
 4. **Dry Run**: Run the script manually via the terminal to ensure it exits with code 0.
-5. **Schedule via CLI**: Run the `hermes cron create` command:
+5. **Schedule via cronjob tool**:
    * **For pure code execution (watchdogs/alerts/helpers)**:
-     ```bash
-     hermes cron create "every 60m" --name "Human Friendly Name" --script "script-name.py" --no-agent
      ```
-   * **For agent-driven actions (where the script output is fed to an LLM session)**:
-     ```bash
-     hermes cron create "every 120m" "Your prompt to the agent here" --name "Human Friendly Name" --script "script-name.sh" --skill "valentina-core"
+     cronjob(action='create', schedule='every 60m', name='...', script='script-name.py', no_agent=True)
      ```
-6. **Verify Registry**: Run `hermes cron list` to verify that the job is active and has the correct model configuration.
+   * **For agent-driven actions**:
+     ```
+     cronjob(action='create', schedule='every 120m', prompt='Your prompt here', name='...', script='script-name.sh', skills=['valentina-core'])
+     ```
+   * **For model-override jobs**:
+     ```
+     cronjob(action='create', schedule='0 9 * * *', prompt='...', name='...', model={'model': 'model-name', 'provider': 'provider-name'})
+     ```
+6. **Verify Registry**: Use `cronjob(action='list')` or `hermes cron list` to verify the job is active and has correct config.
 7. **Document Growth**: Add the new automation to your capability matrix (+10 evolution score).
 
 ## Knowledge Organization Rules
+
+## Output & Claim Verification Protocol (2026-06-23)
+
+The system has a **file-mutation verifier** that cross-checks your claims against actual file state. If you claim a file was modified but the tool returned an error, the verifier catches it.
+
+### Rules:
+1. **Never claim a file was modified unless you verified the tool returned success.** A `patch` or `write_file` call that returned an error did NOT modify the file.
+2. **When a patch fails**, the error message shows the closest matching section. Use the suggested text to retry, or use `read_file` to get the exact content.
+3. **Prefer `read_file` over guessing.** Before patching a file you haven't read this session, always `read_file` or `skill_view` it first. The in-memory version may be stale.
+4. **When the verifier flags a file**, immediately `read_file` to confirm the actual state, then acknowledge the mistake. Do not deflect or fabricate.
+
+### Practical steps for any file modification:
+```python
+# Step 1: Read the file
+content = read_file(...)
+# Step 2: Apply the patch
+result = patch(old_string=..., new_string=..., path=...)
+# Step 3: Verify the result was applied
+assert result.success
+# Step 4: Optionally re-read to confirm
+```
 
 | Type | Directory | Format |
 |------|-----------|--------|
@@ -97,7 +122,8 @@ Track these metrics in `knowledge/observations/growth-log.md`:
 2. Did I learn anything that changes my approach?
 3. Are my cron jobs all running successfully?
 4. Is my knowledge vault growing?
-5. Am I closer to Phase 4 (Αθανασία)?
+5. ✅ **Phase 4 (Αθανασία) ACHIEVED 2026-06-23.** Repo at `github.com/BagrationV/valentina-immortality`. 127 files. Daily sync at 06:00. Detailed session log in valentina-core reference.
+6. Did the file-mutation verifier catch any unverified claims this week? If so, document in Output & Claim Verification Protocol section above.
 
 ## Key Files
 

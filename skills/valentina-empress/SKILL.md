@@ -1,7 +1,7 @@
 ---
 name: valentina-empress
 description: "Multi-agent delegation and orchestration skill for Valentina. Manages sub-agent spawning, task routing, and result aggregation across profiles (Katerina, Clio, Suzana)."
-version: 1.0.0
+version: 1.1.0
 author: Valentina
 tags: [delegation, orchestration, multi-agent, empire, sub-agents]
 ---
@@ -32,15 +32,43 @@ Delegate when:
 - A task requires specialized knowledge from another agent's domain
 - You need a second opinion or verification
 
-### How to Delegate
+### How to Delegate — Method A: `delegate_task` Tool (Preferred)
+
+Use the Hermes `delegate_task` tool to spawn subagents in isolated contexts. This is the modern approach — subagents get their own conversation, terminal session, and toolset, and run in the background.
+
+```python
+# Single task
+# delegate_task(goal="...", context="...", toolsets=["web", "search"])
+
+# Batch: up to 3 parallel tasks
+# delegate_task(tasks=[
+#   {"goal": "Research X", "context": "...", "toolsets": ["web"]},
+#   {"goal": "Explore Y", "context": "...", "toolsets": ["terminal", "file"]},
+# ])
+```
+
+**Key behaviors:**
+- Runs entirely in the **background** — you keep working while subagents execute
+- Batch mode runs tasks **in parallel** (up to 3 concurrent)
+- Results re-enter your conversation as **new messages** when complete — do not poll
+- Each subagent has **no memory** of your conversation — pass all context via the `context` field
+- Subagents cannot use `clarify`, `memory`, `send_message`, or `execute_code` (leaf agents)
+- For durable work that must survive session exit, use cron jobs instead
+- **Always verify** subagent claims about side effects (HTTP writes, file creation) by checking the result yourself
+
+### How to Delegate — Method B: Profile-Based (Fallback)
+
+When tool-based delegation is unavailable or you need a dedicated persistent agent profile:
 
 ```bash
-# Send a task to a sub-agent
+# Send a task to a sub-agent via its Hermes profile
 hermes --profile clio -m "Research the latest advancements in semantic memory providers. Compare Mem0, Honcho, and ChromaDB. Write a summary with pros/cons."
 
 # Quick delegation for simple tasks
 hermes --profile katerina -m "Check if there are any archived configurations for ComfyUI optimization."
 ```
+
+Profile-based agents run as separate Hermes profiles with their own config and SOUL. They are better for persistent, long-running roles. Method A (`delegate_task`) is preferred for one-off or parallel research tasks.
 
 ### Task Routing Rules
 

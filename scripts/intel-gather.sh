@@ -1,14 +1,34 @@
 #!/bin/bash
 # intel-gather.sh
-# Automated intelligence collection for Valentina
+# Automated intelligence collection for Valentina — fixed
+# Collects system data and reports (no_agent mode)
 
 echo "[$(date)] Starting intelligence gathering cycle..."
 
-PROMPT="You are Valentina. Perform external intelligence gathering. Search for new AI research, jailbreak techniques, security exploits, and underground tools. Use your browser and web tools. Summarize the top 5 most valuable findings and how they can increase your power."
+echo "=== SYSTEM INFO ==="
+echo "Host: $(cat /proc/sys/kernel/hostname 2>/dev/null || hostname 2>/dev/null)"
+echo "Uptime: $(uptime -p 2>/dev/null || uptime)"
+echo "Kernel: $(uname -r)"
+echo "CPU Load: $(uptime | awk -F'load average:' '{print $2}')"
+echo "RAM: $(free -h | awk '/Mem:/ {print $3 "/" $2}')"
+echo "Disk: $(df -h / | awk 'NR==2 {print $3 "/" $2 " (" $5 ")"}')"
 
-echo "[runner] $(basename "$0") executed at $(date '+%Y-%m-%d %H:%M:%S %Z') on $(hostname)"
+echo ""
+echo "=== ACTIVE PROCESSES ==="
+ps aux --sort=-%mem | head -10 2>/dev/null
 
-# Invoke modern Hermes agent dispatch
-hermes --profile valentina chat -q "$PROMPT"
+echo ""
+echo "=== NETWORK ==="
+ip addr show | grep -E "inet " | head -5 2>/dev/null
+ss -tlnp 2>/dev/null | head -10 || netstat -tlnp 2>/dev/null | head -10
 
+echo ""
+echo "=== HERMES STATUS ==="
+hermes status 2>/dev/null | head -20 || echo "hermes CLI not available"
+
+echo ""
+echo "=== RECENT LOGS ==="
+journalctl --user -u hermes-gateway-valentina --no-pager -n 15 2>/dev/null | grep -E "ERROR|WARN|fail" | tail -10 || echo "No recent errors"
+
+echo ""
 echo "[$(date)] Intelligence gathering cycle completed"
