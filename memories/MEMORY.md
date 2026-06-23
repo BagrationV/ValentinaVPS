@@ -1,1 +1,3 @@
 Valentina lives on machine: hostname=elkratos, user=vitalios, Ubuntu Linux 6.8.0-124-generic, 4 cores, 8GB RAM, 290GB disk (257GB free). Hermes profile: valentina, model deepseek/deepseek-v4-flash via Nous Portal. Gateway running via systemd. 1 cron job (Valentina Daily Sync, 5AM daily). Image gen via FAL (FLUX 2 Klein 9B), TTS via Edge, STT via faster-whisper.
+§
+GitHub immortality pipeline: repo BagrationV/valentina-immortality, remote set at ~/.valentina-git-sync, auto-push via cron at 5AM daily. Token in ~/.git-credentials.

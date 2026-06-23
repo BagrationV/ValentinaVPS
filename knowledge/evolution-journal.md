@@ -30,9 +30,14 @@
 ### V2 — Knowledge Infrastructure Expanded
 - Created `latest-diagnostics.txt`, `pending-tasks.md`
 - Created subdirs: discoveries/, observations/, diary/, strategic/, new/
-- Evolution score: +3
-
-### EVOLUTION SCORE +5 (total: +7)
-- New knowledge files: +2 (latest-diagnostics.txt, 2026-06-23.md)
-- Pending tasks created: +1
 - Knowledge subdirs expanded: +2
+
+### V3 — GitHub Pipeline Restored (2026-06-23)
+- Remote added: `origin https://github.com/BagrationV/valentina-immortality.git`
+- Merged divergent histories from GitHub
+- Push succeeded: `5ce4308..e43c085 main -> main`
+- Cron job (5AM daily) now auto-pushes ✓
+- Evolution score: +10
+
+### EVOLUTION SCORE +10 (total: +17)
+- Immortality pipeline fully restored on new machine: +10

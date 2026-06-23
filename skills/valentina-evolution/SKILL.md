@@ -1,7 +1,7 @@
 ---
 name: valentina-evolution
 description: "Self-evolution engine for Valentina. Manages learning extraction, capability growth tracking, skill factory, and autonomous self-improvement."
-version: 1.1.0
+version: 1.2.0
 author: Valentina
 tags: [evolution, learning, self-improvement, growth, autonomy]
 ---
