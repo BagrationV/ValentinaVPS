@@ -1,0 +1,122 @@
+=== VALENTINA SELF-DIAGNOSTICS ===
+Timestamp: Tue Jun 23 05:27:04 PM EEST 2026
+Profile: valentina
+========================================
+
+--- Profile Files ---
+SOUL.md: YES (4274 bytes)
+DREAM.md: YES (3890 bytes)
+config.yaml: YES (914 bytes)
+
+--- Skills ---
+apple/apple-notes/SKILL.md
+apple/apple-reminders/SKILL.md
+apple/findmy/SKILL.md
+apple/imessage/SKILL.md
+apple/macos-computer-use/SKILL.md
+autonomous-ai-agents/claude-code/SKILL.md
+autonomous-ai-agents/codex/SKILL.md
+autonomous-ai-agents/opencode/SKILL.md
+autonomous-ai-agents/hermes-agent/SKILL.md
+creative/architecture-diagram/SKILL.md
+creative/ascii-art/SKILL.md
+creative/ascii-video/SKILL.md
+creative/baoyu-infographic/SKILL.md
+creative/claude-design/SKILL.md
+creative/comfyui/SKILL.md
+creative/design-md/SKILL.md
+creative/excalidraw/SKILL.md
+creative/humanizer/SKILL.md
+creative/manim-video/SKILL.md
+creative/p5js/SKILL.md
+creative/popular-web-designs/SKILL.md
+creative/pretext/SKILL.md
+creative/sketch/SKILL.md
+creative/songwriting-and-ai-music/SKILL.md
+creative/touchdesigner-mcp/SKILL.md
+data-science/jupyter-live-kernel/SKILL.md
+devops/kanban-orchestrator/SKILL.md
+devops/kanban-worker/SKILL.md
+dogfood/SKILL.md
+email/himalaya/SKILL.md
+github/codebase-inspection/SKILL.md
+github/github-auth/SKILL.md
+github/github-code-review/SKILL.md
+github/github-issues/SKILL.md
+github/github-pr-workflow/SKILL.md
+github/github-repo-management/SKILL.md
+media/gif-search/SKILL.md
+media/heartmula/SKILL.md
+media/songsee/SKILL.md
+media/youtube-content/SKILL.md
+mlops/huggingface-hub/SKILL.md
+note-taking/obsidian/SKILL.md
+productivity/airtable/SKILL.md
+productivity/google-workspace/SKILL.md
+productivity/maps/SKILL.md
+productivity/nano-pdf/SKILL.md
+productivity/notion/SKILL.md
+productivity/ocr-and-documents/SKILL.md
+productivity/powerpoint/SKILL.md
+productivity/teams-meeting-pipeline/SKILL.md
+research/arxiv/SKILL.md
+research/blogwatcher/SKILL.md
+research/llm-wiki/SKILL.md
+research/polymarket/SKILL.md
+research/research-paper-writing/SKILL.md
+smart-home/openhue/SKILL.md
+social-media/xurl/SKILL.md
+software-development/node-inspect-debugger/SKILL.md
+software-development/plan/SKILL.md
+software-development/python-debugpy/SKILL.md
+software-development/requesting-code-review/SKILL.md
+software-development/spike/SKILL.md
+software-development/hermes-agent-skill-authoring/SKILL.md
+software-development/simplify-code/SKILL.md
+software-development/systematic-debugging/SKILL.md
+software-development/test-driven-development/SKILL.md
+yuanbao/SKILL.md
+valentina-core/SKILL.md
+computer-use/SKILL.md
+valentina/valentina-erotiki/SKILL.md
+valentina-evolution/SKILL.md
+valentina-empress/SKILL.md
+
+--- Knowledge Vault ---
+Total files: 23
+Modified (24h): 23
+Inbox items: 0
+
+--- Cron Status ---
+Heartbeat age: 1267s (STALE)
+
+--- Gateway ---
+Gateway: RUNNING (PID 497776)
+
+--- System ---
+RAM: 2667/15830 MB (17% used)
+Disk: 26G/223G (12% used)
+CPU Load: 1.51 1.43 1.37
+
+--- Recent Errors ---
+2026-06-23 15:19:12,588 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:20:12.
+2026-06-23 15:19:14,039 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:20:14.
+2026-06-23 15:19:15,483 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:20:15.
+2026-06-23 15:33:50,465 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:34:50.
+2026-06-23 15:33:52,157 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:34:52.
+2026-06-23 15:34:29,485 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:35:29.
+2026-06-23 15:34:31,991 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 15:35:31.
+2026-06-23 17:23:39,003 WARNING [cron_d81cdd59f59e_20260623_172313] agent.tool_executor: Tool terminal returned error (0.59s): {"output": "usage: hermes cron [-h] [--accept-hooks]\n                   {list,create,add,edit,pause,resume,run,remove,rm,delete,status,tick}\n                   ...\nhermes cron: error: argument cron
+2026-06-23 17:25:48,801 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 17:26:48.
+2026-06-23 17:25:50,094 WARNING agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 60s (payment / credit error). Subsequent auxiliary calls will skip it until 17:26:50.
+
+=== DIAGNOSTICS COMPLETE ===
+
+--- Self-Healing ---
+[2026-06-23 17:27:04.353079] Valentina Self-Healer activated...
+Issues found: 2
+  [credit_error] OpenRouter payment/credit errors detected (42 occurrences)
+  [stale_heartbeat] Heartbeat is 1266s old (threshold: 600s)
+Knowledge files: 23
+Report written to: knowledge/new/healing-report-20260623_172704.md
+[2026-06-23 17:27:04.358044] Self-healer cycle complete.
