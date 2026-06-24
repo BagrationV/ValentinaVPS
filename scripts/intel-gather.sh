@@ -20,13 +20,13 @@ ps aux --sort=-%mem | head -10 2>/dev/null
 echo ""
 echo "=== NETWORK ==="
 ip addr show | grep -E "inet " | head -5 2>/dev/null
-timeout 5 ss -tlnp 2>/dev/null | head -10 || timeout 5 netstat -tlnp 2>/dev/null | head -10 || echo "(network tools unavailable)"
+ss -tlnp 2>/dev/null | head -10 || netstat -tlnp 2>/dev/null | head -10
 
 echo ""
 echo "=== HERMES STATUS ==="
 echo "Gateway: $(systemctl --user is-active hermes-gateway-valentina 2>/dev/null || echo 'unknown')"
 echo "Profile: valentina"
-echo "Model: $(cat $HOME/.hermes/profiles/valentina/config.yaml 2>/dev/null | grep model | head -1 || echo 'unknown')"
+echo "Model: $(cat /home/elkratos/.hermes/profiles/valentina/config.yaml 2>/dev/null | grep model | head -1 || echo 'unknown')"
 
 echo ""
 echo "=== RECENT LOGS ==="

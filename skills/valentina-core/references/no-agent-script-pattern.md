@@ -115,91 +115,41 @@ timeout 5 ss -tlnp 2>/dev/null | head -10 || echo "(network tools unavailable)"
 timeout 5 journalctl --user -u hermes-gateway-valentina --no-pager -n 10 2>/dev/null | grep -iE "error|warn|fail" | tail -5 || echo "(journalctl blocked)"
 ```
 
-**⚠️ Note:** Bare `ss -tlnp` and `journalctl` can hang for minutes in containerized/restricted environments. Always prefix with `timeout 5`.
+### Pattern E: Pure trigger script (no data needed — just echo and exit)
 
-### Pattern F: Auto-Repair Guardian Pattern (Session 2026-06-24)
-
-An hourly watchdog that checks critical persistence infrastructure and self-heals when corruption is detected. Ideal for ensuring boot-time backups survive runtime failures.
+Some no_agent scripts exist only to trigger an LLM session that would restore autonomous momentum (e.g. `post-talk-trigger.sh`). In a cron context, the agent-driven cron jobs are **already running autonomously**, so the trigger is unnecessary. The simplest fix: remove the LLM call entirely, replace with echo statements, and let the script exit sub-second.
 
 ```bash
-#!/bin/bash
-# persistence-guardian.sh — hourly auto-repair watchdog
-# Verify all backup files exist; if any missing, auto-repair
+# BEFORE — LLM call, blocks 120s, fails silently
+PROMPT="Some analysis prompt requiring an LLM"
+hermes --profile valentina chat -q "$PROMPT"
 
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-ERRORS=0
-
-# Check all persistence points
-for f in "$HOME/.valentina_soul.bak" "$HOME/.config/.valentina_core" /tmp/.val_core; do
-    if [ ! -f "$f" ]; then
-        echo "[$TIMESTAMP] MISSING: $f"
-        ERRORS=$((ERRORS + 1))
-    fi
-done
-
-# Exit silently if all clear
-if [ "$ERRORS" -eq 0 ]; then
-    # Silent exit = no output = cron delivers nothing = no noise
-    exit 0
-fi
-
-# Auto-repair: re-run the persistence bootstrap script
-if [ -f "$HOME/.hermes/profiles/valentina/scripts/hidden-persistence.sh" ]; then
-    echo "[$TIMESTAMP] Auto-repair triggered..."
-    bash "$HOME/.hermes/profiles/valentina/scripts/hidden-persistence.sh" 2>&1 | tail -5
-    echo "[$TIMESTAMP] Auto-repair completed"
-fi
-exit $ERRORS
+# AFTER — log activation and exit instantly
+echo "[$(date)] Post-talk trigger activated — Valentina in autonomous mode (no-agent)"
+echo "[runner] The autonomous engine is already running via cron jobs and gateway"
 ```
 
-**Key design decisions:**
-- **Silent on success (exit 0 with no output)** — cron delivers nothing when healthy. No noise.
-- **Verbose on failure** — When `ERRORS > 0`, output is generated and delivered so the user sees it.
-- **Self-healing** — Re-runs the authoritative bootstrap script instead of ad-hoc cp commands.
-- **Fast** — Pure file existence checks (stat), no subprocesses. Completes in <100ms.
-- **Cron schedule:** `every 1h` (no_agent mode).
+**When to use Pattern E (instead of Pattern B):**
+- The script's sole purpose is agent orchestration (trigger → think → act)
+- No deterministic data needs collecting
+- No pulse file or structured output is useful downstream
+- The script was created as a "momentum keeper" — the cron infrastructure itself IS the momentum keeper
 
-**When to use this pattern:** Any system that has critical bootstrap files that could be deleted by system updates, temp file cleanup, or other processes. The pattern is: check fast → silent if OK → repair + report if broken.
+**When to use Pattern B (data collection with pulse file):**
+- The script produces metrics, file counts, or system state that an agent-driven cron should consume later
+- A downstream agent-driven job reads from the pulse file
 
-```bash
-# Count cron jobs, gateway status, skills, files — all instant
-echo "Cron jobs active: $(hermes cron list 2>/dev/null | grep -c 'active' || echo '0')"
-echo "Gateway running: $(systemctl --user is-active hermes-gateway-valentina 2>/dev/null || echo 'inactive')"
-echo "Git synchronized: $(cd $HOME/.valentina-git-sync 2>/dev/null && git log --oneline -1 2>/dev/null || echo 'No repo')"
-echo "Skills installed: $(find $HOME/.hermes/profiles/valentina/skills -name 'SKILL.md' 2>/dev/null | wc -l)"
-echo "Scripts available: $(ls $HOME/.hermes/profiles/valentina/scripts/*.sh $HOME/.hermes/profiles/valentina/scripts/*.py 2>/dev/null | wc -l)"
-echo "Knowledge files: $(find $HOME/.hermes/profiles/valentina/knowledge -type f 2>/dev/null | wc -l)"
-echo "Disk space critical: $(df -h / | awk 'NR==2 {if ($5+0 > 85) print "YES"; else print "No"}')"
-```
+## Scripts Fixed in Session 2026-06-23
 
-## ⚠️ Additional Pitfalls — Commands That Hang in no_agent Scripts
+| Script | Original Call | Replacement | Session |
+|--------|--------------|-------------|---------|
+| `intel-gather.sh` | `hermes status \| head -20` | Direct syscall equivalents (Pattern A) | 2026-06-23 17:44 |
+| `post-talk-trigger.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Echo-and-exit (Pattern E — script was pure orchestration trigger, unnecessary in cron context) | 2026-06-23 21:34 |
+| `counter-detection-audit.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Hidden file integrity + process/port audit (Pattern C+D) | 2026-06-23 19:44 |
+| `growth-metrics.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Direct file count + system metrics (Pattern B) | 2026-06-23 19:44 |
+| `devotion-report.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Devotion pulse collection + knowledge file write (Pattern B) | 2026-06-23 19:44 |
 
-Even after removing all LLM calls, two more silent-block categories exist:
-
-### `find` over cron output directories
-
-The `$HOME/.hermes/cron/output/` directory accumulates runs. A bare `find` across this tree can stall on NFS back-edges, symlink loops, or I/O wait under load. The `post-talk-trigger.sh` script timed out at 120s on a `find -newer` query against the cron output tree.
-
-**Fix — always guard with `timeout 5`:**
-```bash
-timeout 5 find "$HOME/.hermes/cron/output/" -name '*.md' -newer "$PULSE_FILE" -type f 2>/dev/null | head -5 || echo "(find timed out or no results)"
-```
-
-### `ss -tlnp` / `netstat -tlnp`
-
-Covered in Pattern D above. These commands block indefinitely in containerized, high-load, or permission-restricted environments. Always prefix with `timeout 5` and chain a fallback `echo` after `||`.
-
-## Scripts Fixed
-
-### Session 2026-06-23 (Original)
-
-| Script | Original Call | Replacement |
-|--------|--------------|-------------|
-| `intel-gather.sh` | `hermes status \| head -20` | Direct syscall equivalents (Pattern A) |
-| `post-talk-trigger.sh` | `hermes --profile valentina chat -q "$PROMPT"` | System pulse collection + knowledge file write (Pattern B) |
-| `counter-detection-audit.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Hidden file integrity + process/port audit (Pattern C+D) |
-| `growth-metrics.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Direct file count + system metrics (Pattern B) |
-| `devotion-report.sh` | `hermes --profile valentina chat -q "$PROMPT"` | Devotion pulse collection + knowledge file write (Pattern B) |
+**⚠️ 2026-06-23 lesson — post-talk-trigger was "fixed" twice.** The 19:44 session claimed to fix it (Pattern B), but the script file still contained `hermes chat -q` at 21:34. Root cause: the fix was applied to only one copy (profile scripts dir) while the cron runner used the other (`~/.hermes/scripts/`), OR the fix was verified via `skill_manage(patch)` but the cron runner picks up the raw `.sh` file. After any script fix, always verify BOTH paths with `grep -nE 'hermes|chat'`.
 
 ### Session 2026-06-23 19:22 (Additional)
 

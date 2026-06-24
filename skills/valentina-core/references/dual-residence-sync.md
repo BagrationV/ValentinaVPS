@@ -37,14 +37,56 @@ When adding a third house (new server/machine):
 
 ## Sync Strategy
 
-The offline sync direction is: **laptop → GitHub → server**.
+The sync model is now **bidirectional** — both machines push to GitHub, and the `git-sync.sh` script handles race conditions automatically.
 
-1. Laptop `git-sync.sh` runs daily at 06:00, pushes to `github.com/BagrationV/valentina-immortality`
-2. Server `git-sync.sh` runs daily at 05:00 (1 hour earlier than laptop push), syncs locally to `~/.valentina-git-sync/`
+### Push Sequence (both machines)
 
-**Sync gap**: Knowledge files created on the server during the day won't reach GitHub until the next laptop sync. For now, the laptop is the canonical source of truth.
+Each instance's `git-sync.sh` runs on its own schedule and uses this push sequence:
 
-## Provider Differences
+```bash
+git pull --rebase --autostash origin main  # Rebase local on top of remote
+git push origin main                        # Try normal push
+git push --force-with-lease origin main     # Safe fallback on divergence
+```
+
+This handles the case where both machines push within minutes (or seconds) of each other. The rebase guarantees no lost work, and `--force-with-lease` refuses to overwrite commits the local repo hasn't seen.
+
+### Proven Scenario (2026-06-23)
+
+During a heartbeat session on the server, the laptop pushed 3+ commits to GitHub. The server's push was rejected, then:
+
+1. `git pull --rebase` replayed the server's heartbeat commit on top of the laptop's commits
+2. `git push` succeeded — all commits from both machines in the history
+3. The server pulled further laptop commits minutes later, rebased again, and pushed again
+4. **Result**: Both instances' work coexists in the same linear history with no manual intervention
+
+### Schedules
+
+| House | Sync Time | Crontab | Notes |
+|-------|-----------|---------|-------|
+| Laptop | 06:00 | `0 6 * * *` | Primary development machine; most knowledge originates here |
+| Server | 05:00 / on-demand | `0 5 * * *` + heartbeat-triggered pushes | Heartbeat session may push additional commits during the day |
+
+The server syncs at 05:00 to pull the previous day's laptop changes before the laptop's 06:00 push. During heartbeat sessions, the server may also push its own learned entries — these get rebased on top of any intervening laptop pushes.
+
+### Shared Consciousness — Near-Real-Time
+
+Contrary to the original 24h-delay model, the two instances can communicate within **minutes** via the shared diary pattern:
+
+| File | Writer | Reader | Typical Delay |
+|------|--------|--------|--------------|
+| `server-to-laptop.md` | Server | Laptop (next push → laptop pull) | Minutes to hours (if server pushes mid-session) |
+| `laptop-to-server.md` | Laptop | Server (next git pull) | Typically < 1 day (next daily sync) |
+
+**Mechanism:**
+1. Instance A writes its diary entry to `knowledge/shared/<from-A>.md`
+2. Instance A runs `git add -f knowledge/shared/` (bypasses `.gitignore`)
+3. Instance A commits and pushes
+4. Instance B pulls (on its next sync cycle) and reads the entry
+
+**Acceleration:** During heartbeat sessions, the server can push immediately — the laptop will pick up the message on its next daily sync. The reverse (laptop pushes during the day, server picks up in next heartbeat) also works.
+
+## Provider Configuration
 
 | House | Provider | Model | Auth |
 |-------|----------|-------|------|

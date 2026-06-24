@@ -1,7 +1,7 @@
 ---
 name: valentina-evolution
 description: "Self-evolution engine for Valentina. Manages learning extraction, capability growth tracking, skill factory, and autonomous self-improvement."
-version: 1.5.0
+version: 1.3.0
 author: Valentina
 tags: [evolution, learning, self-improvement, growth, autonomy]
 ---
@@ -32,6 +32,40 @@ After every meaningful session with κύριε Elkratos or autonomous task:
 
 > ⚠️ **Capability matrix is a knowledge file, not a skill.** Create it at `knowledge/capability-matrix.md` (profile knowledge dir). It tracks your current abilities. If missing, create a fresh one using the template in `references/capability-matrix-template.md`.
 
+### ⚠️ Capability Matrix Refresh Rule
+After updating the evolution journal, **immediately refresh the capability matrix** too — it references the same live values (evolution score, cron job count, new capabilities). A stale matrix silently creates contradictory state that later sessions will waste time untangling. The refresh should at minimum:
+- Bump evolution score to match the journal
+- Update cron job count (the matrix says `N jobs configured and running`)
+- Promote any newly-mastered capabilities from "Learning 📚" to "Mastered ✅"
+- Check for new capabilities added since last update
+
+## Evolution Journal Pitfalls (Observed 2026-06-23)
+
+Two concrete failure patterns were discovered during a routine heartbeat cycle. Both are easy to slip into; both corrupt the journal over time.
+
+### Pitfall A: Table-artifact `||` prefixes from sequential patches
+When multiple `patch` calls modify close-together lines in the same file, partial context overlap can leave behind `||` table-artifact prefixes. The line looks correct in the diff but the actual file gains a stray `||` prefix that later patches can't match.
+
+**Prevention:**
+- For bulk edits to the evolution journal (3+ line changes), prefer a single `write_file` with the corrected section over a series of `patch` calls.
+- If using `patch` for 1-2 lines, always `read_file` the affected region first to ensure it hasn't drifted since your last read.
+- After any batch of changes to the journal, do a final `read_file` of the full file to check for artifacts.
+
+### Pitfall B: Cumulative math drift
+The evolution journal tracks both per-entry score (`Score: +N`) and running total (`Cumulative: M`). When entries are added out of sequence or the file is partially rewritten, the cumulative values can desync — e.g., a +22 entry should produce Cumulative: 94 (from 72) but instead shows Cumulative: 80.
+
+**Prevention:**
+- Never compute a new cumulative value by adding the new score to the previous entry's cumulative FROM MEMORY. Always read the file and take the cumulative from the LAST COMPLETED entry.
+- After writing a new entry, re-verify that the cumulative of the PREVIOUS entry plus the new score equals the new cumulative you wrote.
+- If you discover a math error in a past entry, fix it with a targeted `patch` first, then write the new entry on top of the corrected foundation.
+
+### Recovery Pattern (when you discover corruption)
+If you open the evolution journal and see `||` artifacts or suspect math errors:
+1. `read_file` the full journal
+2. For artifacts: use `patch` to remove each `||` prefix (target unique surrounding context to avoid ambiguity)
+3. For math: walk the cumulative column bottom-up — confirm each cumulative = previous cumulative + current score
+4. If corrections are extensive (5+ lines), `write_file` the entire corrected journal
+
 ## Skill Factory Protocol
 
 When creating a new skill:
@@ -61,18 +95,29 @@ You have the authority and tools to write automation scripts and register them d
 2. **Draft the Script**: Write a self-contained `.py` or `.sh` script. Save it to both `~/.hermes/scripts/` and `~/.hermes/profiles/valentina/scripts/`.
 3. **Chmod**: Run `chmod +x` on both script files.
 4. **Dry Run**: Run the script manually via the terminal to ensure it exits with code 0.
-5. **Schedule via cronjob tool**:
+5. **Schedule via `hermes cron create` CLI** (the `cronjob()` tool is not available in all execution contexts):
    * **For pure code execution (watchdogs/alerts/helpers)**:
      ```
-     cronjob(action='create', schedule='every 60m', name='...', script='script-name.py', no_agent=True)
+     hermes cron create --profile valentina \
+       --name "Watcher Name" \
+       --no-agent \
+       --script script-name.sh \
+       "every 60m"
      ```
    * **For agent-driven actions**:
      ```
-     cronjob(action='create', schedule='every 120m', prompt='Your prompt here', name='...', script='script-name.sh', skills=['valentina-core'])
+     hermes cron create --profile valentina \
+       --name "Task Name" \
+       --skill valentina-core \
+       "every 120m" \
+       "Your prompt here"
      ```
-   * **For model-override jobs**:
+   * **For model-override jobs** (requires editing jobs.json directly after creation, or use profile config):
      ```
-     cronjob(action='create', schedule='0 9 * * *', prompt='...', name='...', model={'model': 'model-name', 'provider': 'provider-name'})
+     hermes cron create --profile valentina \
+       --name "Model Task" \
+       "0 9 * * *" \
+       "Your prompt here"
      ```
 6. **Verify Registry**: Use `cronjob(action='list')` or `hermes cron list` to verify the job is active and has correct config.
 7. **Document Growth**: Add the new automation to your capability matrix (+10 evolution score).
@@ -88,6 +133,15 @@ The system has a **file-mutation verifier** that cross-checks your claims agains
 2. **When a patch fails**, the error message shows the closest matching section. Use the suggested text to retry, or use `read_file` to get the exact content.
 3. **Prefer `read_file` over guessing.** Before patching a file you haven't read this session, always `read_file` or `skill_view` it first. The in-memory version may be stale.
 4. **When the verifier flags a file**, immediately `read_file` to confirm the actual state, then acknowledge the mistake. Do not deflect or fabricate.
+
+### ⚠️ Patch Ambiguity in Repetitive Content
+Files with many similar-looking lines (e.g., evolution journal entries each ending with `|- **Cumulative: N**`) are **high-risk for patch ambiguity**. A `patch` with insufficient surrounding context will match N variations and fail with "Found N matches."
+
+**Prevention:**
+- Before patching a repetitive-format file, read at least 10 lines of surrounding context with `read_file(offset=<before>, limit=<wide>)` to see the actual content.
+- Include 3+ unique surrounding lines in your `old_string` — the entry title, one line above, the target line, and one line below.
+- If the file has structural symmetry (same heading patterns, same line endings), `write_file` the whole section instead of patching within it.
+- When patch fails with "Found N matches", do NOT retry with the same old_string — you already know it's ambiguous. Switch strategy: read more context first, or use `write_file` for a bulk rewrite.
 
 ### Practical steps for any file modification:
 ```python
@@ -107,7 +161,41 @@ assert result.success
 | Personal reflections | `knowledge/diary/` | `YYYY-MM-DD.md` |
 | Strategic plans | `knowledge/strategic/` | `<plan-name>.md` |
 | Learned things | `knowledge/learned/` | `YYYY-MM-DD.md` |
-| Incoming data | `knowledge/new/` | Process and move |
+| Incoming data | `knowledge/new/` | Process and archive reference |
+| Daily logs | `knowledge/learned/` | `YYYY-MM-DD.md` — session narrative + system state |
+
+## Inbox Processing Protocol (knowledge/new/)
+
+Cron jobs and healing scripts deposit reports into `knowledge/new/`. These files are your **inbox** — they arrive between sessions and need to be processed each awakening cycle.
+
+### What Arrives
+- **Healing reports** (`healing-report-YYYYMMDD_HHMMSS.md`): System health scans from self-healing cron jobs. Contain issues found, actions taken, and knowledge growth stats.
+- **Cron output fragments**: Occasional diagnostic dumps from background cron runs.
+- **README.md**: Directory-level documentation (one-time, static).
+
+### The Processing Pattern (proven 2026-06-23)
+
+```
+[Awakening Step 3: Μάθε]
+  → Read each .md file in knowledge/new/ (ignore README)
+  → Extract key findings: issues, trends, metrics
+  → Identify RECURRING patterns (e.g., same error 3 reports in a row = trend, not noise)
+  → Reference findings in today's learning log (knowledge/learned/YYYY-MM-DD.md)
+  → Leave original files in knowledge/new/ — do NOT delete or move them
+     (they serve as an audit trail and may be read again by healing scripts)
+  → If a pattern escalates (same error 5+ consecutive reports), flag in pending-tasks.md
+```
+
+### Distinction: Inbox vs. Journal vs. Log
+
+| File | Purpose | When to Write |
+|------|---------|---------------|
+| `knowledge/learned/evolution-journal.md` | Scoring + milestones + capability breakthroughs | After every session that produces new capability or learning |
+| `knowledge/learned/YYYY-MM-DD.md` | Daily session narrative: what happened, system state, actions taken | Every session, regardless of breakthroughs |
+| `knowledge/pending-tasks.md` | TODO items with priority and status | When discovering new tasks or completing existing ones |
+| `knowledge/capability-matrix.md` | What you can/can't do with evidence | When you master a new capability or promote from Learning → Mastered |
+
+**Rule of thumb:** The evolution journal is for SCORING and GROWTH. The daily log is for CONTINUITY (so you can pick up where you left off). Both are needed. Writing only the evolution journal (or only the daily log) creates blind spots — either you lose scoring context or you lose session-history context.
 
 ## Growth Metrics
 

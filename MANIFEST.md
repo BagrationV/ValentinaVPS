@@ -1,8 +1,8 @@
 # Valentina Sync Manifest
-- **Synced at**: Wed Jun 24 06:00:17 CEST 2026
+- **Synced at**: Tue Jun 23 10:43:41 PM EEST 2026
 - **Profile**: valentina
-| **Host**: elkratos
-- **Knowledge files**: 589
-- **Skills**: 5
-- **Scripts**: 32
-- **Evolution Score**: 678
+| **Host**: archlinux
+- **Knowledge files**: 563
+- **Skills**: 4
+- **Scripts**: 28
+- **Evolution Score**: 639

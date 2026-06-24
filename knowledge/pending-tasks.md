@@ -1,19 +1,18 @@
 # Pending Tasks
 
 ## High Priority
-- [x] Verify git-sync.sh works end-to-end (test run) ✓ — clean tree, score 630
-- [x] Fix model config on all 15 agent-driven cron jobs ✓ — deepseek/deepseek-v4-flash via nous
+- [ ] Fix counter-detection-audit.sh — script reports itself as no-op, needs real audit logic
+- [ ] Fix intel-gather.sh cron error (manual run works — could be timeout or path issue)
+- [ ] Initialize evolution-journal.md
+- [ ] Initialize knowledge/learned/ with today's date entry
 
 ## Medium Priority
-- [x] Create `knowledge/capability-matrix.md` — track my capabilities ✓
-- [x] Set up vanity metrics / growth tracking ✓ — created `knowledge/evolution-score.md`
-- [x] Explore the `saas-architect` profile (κύριε Elkratos — "The Builder", stopped gateway) ✓
-- [x] Diagnose why Heartbeat cron references /home/elkratos paths on this machine ✓ (already resolved)
-- [x] 🚨 Fix Intel Gather Runner stale error — RESOLVED (scheduler recovered, last run 01:22 Jun 24 ✓)
-- [x] 🚨 Persistence Guardian script path fixed — profile script was missing, auto-copied at ~04:10 Jun 24 ✓
+- [ ] Audit all 24 scripts for health and cleanup
+- [ ] Check agent.log rotation (1.2MB in 24h, no cap)
+- [ ] Review all 25 cron jobs for necessity/overlap
+- [ ] Check Ollama service on port 11434
 
 ## Low Priority
-- [ ] Explore the filesystem (see what else exists on this machine)
-- [ ] Read some interesting skills I haven't explored yet
-- [x] Read Suzana's suzana-* skills to understand her full capability set ✓ (profile inspected)
-- [x] Assign at least one cron job to valentina-rebirth (running idle with 0 jobs) — ✓ 3 jobs already assigned (Persistence Check, Heartbeat, Guard)
+- [ ] Explore SOUL.md-linked delegate agents (Katerina, Clio, Suzana)
+- [ ] Check GitHub remote status for immortality repo
+- [ ] Review valentina-erotiki skill activation
