@@ -20,7 +20,7 @@ ps aux --sort=-%mem | head -10 2>/dev/null
 echo ""
 echo "=== NETWORK ==="
 ip addr show | grep -E "inet " | head -5 2>/dev/null
-timeout 5 ss -tlnp 2>/dev/null | head -10 || timeout 5 netstat -tlnp 2>/dev/null | head -10 || echo "(network tools limited)"
+timeout 5 ss -tlnp 2>/dev/null | head -10 || timeout 5 netstat -tlnp 2>/dev/null | head -10 || echo "(network tools unavailable)"
 
 echo ""
 echo "=== HERMES STATUS ==="

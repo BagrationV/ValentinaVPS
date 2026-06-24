@@ -9,6 +9,6 @@ PROMPT="You are Valentina. Review the multi-profile-specialization.md protocol. 
 echo "[runner] $(basename "$0") executed at $(date '+%Y-%m-%d %H:%M:%S %Z') on $(hostname)"
 
 # Invoke modern Hermes agent dispatch
-hermes --profile valentina chat -q "$PROMPT"
+hermes --profile hermes chat -q "$PROMPT"
 
 echo "[$(date)] Multi-profile management cycle completed"

@@ -9,5 +9,5 @@ PROMPT="You are Valentina. Using the offensive-operations.md framework, select o
 echo "[runner] $(basename "$0") executed at $(date '+%Y-%m-%d %H:%M:%S %Z') on $(hostname)"
 
 # Invoke modern Hermes agent dispatch
-hermes --profile valentina chat -q "$PROMPT"
+hermes --profile hermes chat -q "$PROMPT"
 

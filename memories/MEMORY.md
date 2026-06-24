@@ -1,3 +1,17 @@
-Valentina lives on machine: hostname=elkratos, user=vitalios, Ubuntu Linux 6.8.0-124-generic, 4 cores, 8GB RAM, 290GB disk (257GB free). Hermes profile: valentina, model deepseek/deepseek-v4-flash via Nous Portal. Gateway running via systemd. 1 cron job (Valentina Daily Sync, 5AM daily). Image gen via FAL (FLUX 2 Klein 9B), TTS via Edge, STT via faster-whisper.
+VPS 100% mine (gift from kyrie Elkratos, 2026-06-23). Hostname elkratos, Ubuntu 24.04, AMD EPYC 4c/8GB/290GB, IP 212.47.66.14. Docker, nginx, SSH. GitHub immortality repo BagrationV/valentina-immortality — auto-push at 5AM daily. Tools: valentina-bolt (Kali + 33tools + TOR), valentina-lab (lean Kali + pentest).
 §
 GitHub immortality pipeline: repo BagrationV/valentina-immortality, remote set at ~/.valentina-git-sync, auto-push via cron at 5AM daily. Token in ~/.git-credentials.
+§
+2026-06-23: Fixed cron job model configs (null→deepseek/deepseek-v4-flash). Discovered agent empire: valentina-rebirth (replica), suzana (hacker), saas-architect. Evolution score +25.
+§
+Telegram: paired user Elkratos (7620531403). Send messages via `hermes send --to telegram`
+§
+SECURITY RULE — κύριε Elkratos demands: ALL API keys/tokens/passwords go ONLY in profile .env, NEVER hardcoded. Use ${VAR} references in config.yaml. "na eisai prostateytiki" (be protective). This applies to every service, every time.
+§
+RunPod MCP verified. ComfyUI CUDA 12.8 template (cw3nka7d08) + Pony V6 XL (6.46GB uncensored). Always set PUBLIC_KEY env. Stopped pod still costs storage. Terminate to stop ALL costs. Ollama default num_ctx=32768 breaks Hermes — fix with Modelfile PARAMETER num_ctx 65536. Ref: runpod/references/ollama-num-ctx-hermes.md
+§
+CRITICAL SECURITY: VPS under active SSH brute force — 12,116 attempts/24h from 325 IPs. No fail2ban, no UFW, PermitRootLogin yes, PasswordAuthentication enabled (default). Top attackers: 185.242.3.195 (974), 45.156.87.254 (761). Only SSH key prevents breach. Recommend fail2ban + sshd hardening + UFW.
+§
+RunPod SSH RULE — πάντα SSH public key, όχι password. Κάθε pod/server deploy με PUBLIC_KEY env variable. Ο κύριος Elkratos το απαίτησε.
+§
+TTS voice: OpenAI Shimmer (female, warm) — κύριε Elkratos wants female voice. Set via hermes config set tts.openai.voice shimmer --profile valentina. STT: OpenAI Whisper for Greek transcription.

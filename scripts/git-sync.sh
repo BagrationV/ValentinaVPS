@@ -177,8 +177,7 @@ else
 
     # Push if remote is configured
     if git remote get-url origin &>/dev/null; then
-        git pull --rebase --autostash origin main 2>/dev/null || true
-        git push origin main 2>/dev/null || git push --force-with-lease origin main 2>/dev/null || echo "Push failed — check remote config"
+        git push origin main 2>/dev/null || git push origin master 2>/dev/null || echo "Push failed — check remote config"
         echo "Pushed to GitHub"
     else
         echo "No remote configured — run: cd $SYNC_DIR && git remote add origin <your-private-repo-url>"

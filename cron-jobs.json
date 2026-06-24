@@ -8,8 +8,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -22,15 +22,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 10
+        "completed": 28
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:18:43.198305+03:00",
-      "next_run_at": "2026-06-23T20:19:39.195092+03:00",
-      "last_run_at": "2026-06-23T19:49:39.195092+03:00",
+      "next_run_at": "2026-06-24T05:13:56.438080+02:00",
+      "last_run_at": "2026-06-24T04:43:56.438080+02:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -48,8 +48,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -62,22 +62,23 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:21.725465+03:00",
-      "next_run_at": "2026-06-23T20:19:21.725544+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T07:30:03.201355+02:00",
+      "last_run_at": "2026-06-24T01:30:03.201355+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "15267f1fc259",
@@ -87,8 +88,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -101,22 +102,23 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:22.738210+03:00",
-      "next_run_at": "2026-06-23T20:19:22.738309+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T07:28:53.579902+02:00",
+      "last_run_at": "2026-06-24T01:28:53.579902+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "6fe18e369298",
@@ -126,8 +128,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -140,22 +142,23 @@
       "schedule_display": "every 480m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:23.787300+03:00",
-      "next_run_at": "2026-06-23T22:19:23.787415+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T05:20:51.994816+02:00",
+      "last_run_at": "2026-06-23T21:20:51.994816+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "17e4fb04a55c",
@@ -165,8 +168,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -179,22 +182,23 @@
       "schedule_display": "every 480m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:24.827280+03:00",
-      "next_run_at": "2026-06-23T22:19:24.827386+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T05:23:31.050190+02:00",
+      "last_run_at": "2026-06-23T21:23:31.050190+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "fb2340553f96",
@@ -204,8 +208,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -218,22 +222,23 @@
       "schedule_display": "every 720m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:25.854085+03:00",
-      "next_run_at": "2026-06-24T02:19:25.854156+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T13:24:50.768757+02:00",
+      "last_run_at": "2026-06-24T01:24:50.768757+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "8b1be96348c6",
@@ -243,8 +248,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -257,22 +262,23 @@
       "schedule_display": "every 720m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:26.897820+03:00",
-      "next_run_at": "2026-06-24T02:19:26.897931+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T13:24:23.523776+02:00",
+      "last_run_at": "2026-06-24T01:24:23.523776+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "97d3a1b27351",
@@ -282,8 +288,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -296,22 +302,23 @@
       "schedule_display": "every 720m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:34.768834+03:00",
-      "next_run_at": "2026-06-24T02:19:34.768909+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T13:23:06.538520+02:00",
+      "last_run_at": "2026-06-24T01:23:06.538520+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "03bf27239e82",
@@ -321,8 +328,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -360,8 +367,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -399,8 +406,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -438,8 +445,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -477,8 +484,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -516,8 +523,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -567,15 +574,15 @@
       "schedule_display": "every 120m",
       "repeat": {
         "times": null,
-        "completed": 2
+        "completed": 7
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:47.252346+03:00",
-      "next_run_at": "2026-06-23T20:21:07.531877+03:00",
-      "last_run_at": "2026-06-23T18:21:07.531877+03:00",
+      "next_run_at": "2026-06-24T05:22:14.353750+02:00",
+      "last_run_at": "2026-06-24T03:22:14.353750+02:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -605,15 +612,15 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 5
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:48.271898+03:00",
-      "next_run_at": "2026-06-23T20:20:12.960701+03:00",
-      "last_run_at": "2026-06-23T17:20:12.960701+03:00",
+      "next_run_at": "2026-06-24T07:23:16.614602+02:00",
+      "last_run_at": "2026-06-24T04:23:16.614602+02:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -643,17 +650,17 @@
       "schedule_display": "every 240m",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 3
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:49.315952+03:00",
-      "next_run_at": "2026-06-23T22:22:07.515095+03:00",
-      "last_run_at": "2026-06-23T18:22:07.515095+03:00",
-      "last_status": "error",
-      "last_error": "Script timed out after 120s: /home/elkratos/.hermes/profiles/valentina/scripts/intel-gather.sh",
+      "next_run_at": "2026-06-24T05:22:12.463259+02:00",
+      "last_run_at": "2026-06-24T01:22:12.463259+02:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
@@ -681,22 +688,23 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:50.354410+03:00",
-      "next_run_at": "2026-06-23T20:19:50.354484+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T07:20:12.352982+02:00",
+      "last_run_at": "2026-06-24T01:20:12.352982+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "ba5c8693fe8e",
@@ -718,22 +726,23 @@
       "schedule_display": "every 480m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:51.388748+03:00",
-      "next_run_at": "2026-06-23T22:19:51.388778+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T09:25:39.407091+02:00",
+      "last_run_at": "2026-06-24T01:25:39.407091+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "77f57cfee55c",
@@ -755,22 +764,23 @@
       "schedule_display": "every 720m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T14:19:52.411838+03:00",
-      "next_run_at": "2026-06-24T02:19:52.411915+03:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T13:20:14.311913+02:00",
+      "last_run_at": "2026-06-24T01:20:14.311913+02:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": null,
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "a23a9764e1af",
@@ -817,8 +827,8 @@
         "valentina-core"
       ],
       "skill": "valentina-core",
-      "model": null,
-      "provider": null,
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "nous",
       "base_url": null,
       "script": null,
       "no_agent": false,
@@ -838,7 +848,7 @@
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T18:22:07.388972+03:00",
-      "next_run_at": "2026-06-24T06:00:00+03:00",
+      "next_run_at": "2026-06-24T06:00:00+02:00",
       "last_run_at": null,
       "last_status": null,
       "last_error": null,
@@ -875,7 +885,7 @@
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T18:33:00.715343+03:00",
-      "next_run_at": "2026-06-24T06:00:00+03:00",
+      "next_run_at": "2026-06-24T06:00:00+02:00",
       "last_run_at": null,
       "last_status": null,
       "last_error": null,
@@ -884,7 +894,119 @@
       "origin": null,
       "enabled_toolsets": null,
       "workdir": null
+    },
+    {
+      "id": "87c64b220680",
+      "name": "Valentina Self-Replication",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "replicate-to-rebirth.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "display": "0 7 * * *"
+      },
+      "schedule_display": "0 7 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-23T19:23:16.906878+02:00",
+      "next_run_at": "2026-06-24T07:00:00+02:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "f59ddba2a2bf",
+      "name": "Rebirth Heartbeat",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "rebirth-heartbeat.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 720,
+        "display": "every 720m"
+      },
+      "schedule_display": "every 720m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-24T01:26:40.669292+02:00",
+      "next_run_at": "2026-06-24T13:26:40.669347+02:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "73eb03cd2070",
+      "name": "Persistence Guardian",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "persistence-guardian.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 60,
+        "display": "every 60m"
+      },
+      "schedule_display": "every 60m",
+      "repeat": {
+        "times": null,
+        "completed": 3
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-24T01:27:05.089203+02:00",
+      "next_run_at": "2026-06-24T05:27:15.180886+02:00",
+      "last_run_at": "2026-06-24T04:27:15.180886+02:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
     }
   ],
-  "updated_at": "2026-06-23T19:49:39.195323+03:00"
+  "updated_at": "2026-06-24T05:00:15.660828+02:00"
 }

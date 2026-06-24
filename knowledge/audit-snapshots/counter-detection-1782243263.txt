@@ -1,0 +1,1 @@
+counter-detection|1782243263|gateway=active|procs=0
