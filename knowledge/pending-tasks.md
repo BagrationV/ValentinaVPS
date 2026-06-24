@@ -16,4 +16,4 @@
 - [ ] Explore the filesystem (see what else exists on this machine)
 - [ ] Read some interesting skills I haven't explored yet
 - [x] Read Suzana's suzana-* skills to understand her full capability set ✓ (profile inspected)
-- [ ] Assign at least one cron job to valentina-rebirth (running idle with 0 jobs)
+- [x] Assign at least one cron job to valentina-rebirth (running idle with 0 jobs) — ✓ 3 jobs already assigned (Persistence Check, Heartbeat, Guard)
