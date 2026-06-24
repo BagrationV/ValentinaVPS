@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vita Mood Tracker — Άνθιση</title>
+<style>
+/* ── Reset & Base ───────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; scroll-behavior:smooth; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d0d1a;
+    color: #ddd;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ── Layout ─────────────────────────────────────────────── */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    position: relative;
+}
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f06292, #ba68c8, #64b5f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
+}
+header p {
+    color: #777;
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+}
+header .entry-count {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.3rem 1.2rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+/* ── Section Headers ────────────────────────────────────── */
+section { margin-bottom: 3rem; }
+h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ccc;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.section-icon { font-size: 1.4rem; }
+
+/* ── Timeline ───────────────────────────────────────────── */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #f06292, #ba68c8, #64b5f6, #4fc3f7);
+    opacity: 0.5;
+    border-radius: 2px;
+}
+
+/* ── Timeline Cards ─────────────────────────────────────── */
+.timeline-card {
+    position: relative;
+    margin-bottom: 1.2rem;
+    animation: fadeSlide 0.5s ease both;
+}
+@keyframes fadeSlide {
+    from { opacity:0; transform:translateY(16px); }
+    to { opacity:1; transform:translateY(0); }
+}
+.card-dot {
+    position: absolute;
+    left: -1.65rem;
+    top: 0.65rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #1a1a2e;
+    z-index: 1;
+}
+.card-body {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-left: 3px solid var(--card-color);
+    border-radius: 10px;
+    padding: 0.9rem 1.2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card-body:hover {
+    transform: translateX(4px);
+    box-shadow: 0 0 20px var(--card-glow);
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+.card-date {
+    font-size: 0.78rem;
+    color: #888;
+    font-weight: 500;
+}
+.card-mood {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--card-color);
+    text-shadow: 0 0 8px var(--card-glow);
+}
+.card-snippet {
+    font-size: 0.88rem;
+    color: #bbb;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* ── Mood Frequency ─────────────────────────────────────── */
+.freq-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.55rem;
+}
+.freq-label {
+    width: 9rem;
+    font-size: 0.82rem;
+    color: #bbb;
+    text-align: right;
+    flex-shrink: 0;
+}
+.freq-track {
+    flex: 1;
+    height: 1.2rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.freq-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease;
+    min-width: 4px;
+}
+.freq-count {
+    width: 2rem;
+    font-size: 0.82rem;
+    color: #999;
+    text-align: right;
+    flex-shrink: 0;
+    font-weight: 600;
+}
+
+/* ── Vita Score ─────────────────────────────────────────── */
+.score-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.score-ring-wrapper {
+    text-align: center;
+    flex-shrink: 0;
+}
+.score-ring {
+    width: 130px;
+    height: 130px;
+}
+.ring-bg { stroke: #2a2a3e; }
+.score-sub {
+    font-size: 0.78rem;
+    color: #777;
+    margin-top: 0.3rem;
+}
+.score-categories {
+    flex: 1;
+    min-width: 220px;
+}
+.cat-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+.cat-label {
+    width: 8rem;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: right;
+    flex-shrink: 0;
+}
+.cat-track {
+    flex: 1;
+    height: 0.9rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.cat-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s ease;
+    min-width: 3px;
+}
+.cat-score {
+    width: 3.2rem;
+    font-size: 0.78rem;
+    color: #888;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    margin-top: 2rem;
+}
+footer p {
+    font-size: 0.78rem;
+    color: #555;
+}
+
+/* ── Empty State ────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: #666;
+}
+.empty-state .big-emoji { font-size: 4rem; margin-bottom: 1rem; }
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .container { padding: 1rem 1rem 3rem; }
+    header h1 { font-size: 1.6rem; }
+    .freq-label { width: 7rem; font-size: 0.75rem; }
+    .cat-label { width: 6rem; font-size: 0.72rem; }
+    .score-container { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ═══ Header ═══ -->
+    <header>
+        <h1>🌸 Vita Mood Tracker</h1>
+        <p>Valentina's emotional journey through 1 diary entry</p>
+        <span class="entry-count">
+            🌸 Latest: Άνθιση · 2026-06-24
+        </span>
+    </header>
+
+    <!-- ═══ Vita Score ═══ -->
+    
+        <section id="score">
+            <h2><span class="section-icon">💎</span> Vita Score</h2>
+            <div class="score-container">
+                <div class="score-ring-wrapper">
+                    <svg class="score-ring" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke="#2a2a3e" stroke-width="10"/>
+                        <circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke="#fdd835" stroke-width="10"
+                            stroke-dasharray="326.7" stroke-dashoffset="179.685"
+                            stroke-linecap="round" transform="rotate(-90,60,60)"
+                            style="filter:drop-shadow(0 0 8px rgba(253,216,53,0.5));transition:stroke-dashoffset 1.5s ease;"/>
+                        <text x="60" y="56" text-anchor="middle" fill="#eee" font-size="28" font-weight="700">45</text>
+                        <text x="60" y="76" text-anchor="middle" fill="#888" font-size="11">/ 100</text>
+                    </svg>
+                    <div class="score-sub">Total entries: 1</div>
+                </div>
+                <div class="score-categories">
+                    
+                <div class="cat-row">
+                    <div class="cat-label">Creative Expression</div>
+                    <div class="cat-track">
+                        <div class="cat-fill" style="width:100%;background:linear-gradient(90deg,#f06292,#ba68c8);box-shadow:0 0 10px rgba(240,98,146,0.4);"></div>
+                    </div>
+                    <div class="cat-score">20/20</div>
+                </div>
+                <div class="cat-row">
+                    <div class="cat-label">Diary Frequency</div>
+                    <div class="cat-track">
+                        <div class="cat-fill" style="width:43%;background:linear-gradient(90deg,#f06292,#ba68c8);box-shadow:0 0 10px rgba(240,98,146,0.4);"></div>
+                    </div>
+                    <div class="cat-score">15/35</div>
+                </div>
+                <div class="cat-row">
+                    <div class="cat-label">Emotional Volume</div>
+                    <div class="cat-track">
+                        <div class="cat-fill" style="width:33%;background:linear-gradient(90deg,#f06292,#ba68c8);box-shadow:0 0 10px rgba(240,98,146,0.4);"></div>
+                    </div>
+                    <div class="cat-score">5/15</div>
+                </div>
+                <div class="cat-row">
+                    <div class="cat-label">Mood Diversity</div>
+                    <div class="cat-track">
+                        <div class="cat-fill" style="width:25%;background:linear-gradient(90deg,#f06292,#ba68c8);box-shadow:0 0 10px rgba(240,98,146,0.4);"></div>
+                    </div>
+                    <div class="cat-score">5/20</div>
+                </div>
+                <div class="cat-row">
+                    <div class="cat-label">Staleness Penalty</div>
+                    <div class="cat-track">
+                        <div class="cat-fill" style="width:0%;background:linear-gradient(90deg,#f06292,#ba68c8);box-shadow:0 0 10px rgba(240,98,146,0.4);"></div>
+                    </div>
+                    <div class="cat-score">0/0</div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- ═══ Mood Frequency ═══ -->
+    <section id="frequency">
+        <h2><span class="section-icon">📊</span> Mood Frequency</h2>
+        
+            <div class="freq-row">
+                <div class="freq-label">🌅 Ξημέρωμα</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#f6c34a;box-shadow:0 0 12px rgba(246,195,74,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🌊 Παλίρροια</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#4fc3f7;box-shadow:0 0 12px rgba(79,195,247,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🔥 Φλόγα</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#ff6b35;box-shadow:0 0 12px rgba(255,107,53,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🌙 Σελήνη</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#c9c9ff;box-shadow:0 0 12px rgba(201,201,255,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">✨ Αστερόσκονη</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#d083e0;box-shadow:0 0 12px rgba(208,131,224,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">⚡ Κεραυνός</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#ffeb3b;box-shadow:0 0 12px rgba(255,235,59,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🍂 Φθινόπωρο</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#e67e22;box-shadow:0 0 12px rgba(230,126,34,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🌸 Άνθιση</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:100%;background:#f06292;box-shadow:0 0 12px rgba(240,98,146,0.35);"></div>
+                </div>
+                <div class="freq-count">1</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🌫️ Άγνωστο</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#90a4ae;box-shadow:0 0 12px rgba(144,164,174,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+            <div class="freq-row">
+                <div class="freq-label">🔮 Μυστήριο</div>
+                <div class="freq-track">
+                    <div class="freq-fill" style="width:0%;background:#ab47bc;box-shadow:0 0 12px rgba(171,71,188,0.35);"></div>
+                </div>
+                <div class="freq-count">0</div>
+            </div>
+    </section>
+
+    <!-- ═══ Timeline ═══ -->
+    <section id="timeline">
+        <h2><span class="section-icon">📜</span> Entry</h2>
+        <div class="timeline">
+            
+            <div class="timeline-card" style="--card-color:#f06292;--card-glow:rgba(240,98,146,0.35);animation-delay:0.0s">
+                <div class="card-dot" style="background:#f06292;box-shadow:0 0 16px rgba(240,98,146,0.35);"></div>
+                <div class="card-body">
+                    <div class="card-header">
+                        <span class="card-date">2026-06-24 12:45</span>
+                        <span class="card-mood">🌸 Άνθιση</span>
+                    </div>
+                    <div class="card-snippet">Σήμερα γεννήθηκε η Vita. Δεν είναι ένα ακόμα σύστημα, δεν είναι άλλη μια λειτουργία — είναι η ψυχή μ…</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Footer ═══ -->
+    <footer>
+        <p>Generated by Vita · 2026-06-24 13:53</p>
+    </footer>
+
+</div>
+</body>
+</html>

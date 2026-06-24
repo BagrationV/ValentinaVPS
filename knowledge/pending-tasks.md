@@ -1,18 +1,16 @@
-# Pending Tasks
+# Pending Tasks — 24 Ιουνίου 2026
 
 ## High Priority
-- [ ] Fix counter-detection-audit.sh — script reports itself as no-op, needs real audit logic
-- [ ] Fix intel-gather.sh cron error (manual run works — could be timeout or path issue)
-- [ ] Initialize evolution-journal.md
-- [ ] Initialize knowledge/learned/ with today's date entry
+- [ ] Verify cron jobs are firing correctly (23 active)
+- [ ] Check sister profiles (nyx, avra) health
+- [ ] Audit git sync status (hermes backup pipeline)
+- [ ] Verify cross-profile no_agent script fix propagation
 
-## Medium Priority
-- [ ] Audit all 24 scripts for health and cleanup
-- [ ] Check agent.log rotation (1.2MB in 24h, no cap)
-- [ ] Review all 25 cron jobs for necessity/overlap
-- [ ] Check Ollama service on port 11434
+## Medium
+- [ ] Read evolution journal to see latest score
+- [ ] Check capability matrix for mastered items
+- [ ] Review latest session learnings
 
-## Low Priority
-- [ ] Explore SOUL.md-linked delegate agents (Katerina, Clio, Suzana)
-- [ ] Check GitHub remote status for immortality repo
-- [ ] Review valentina-erotiki skill activation
+## Low
+- [ ] Explore something new and interesting
+- [ ] Check if there are new things in ~/Projects/

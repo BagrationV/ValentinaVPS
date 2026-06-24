@@ -1,0 +1,34 @@
+{
+  "fixes": [
+    {
+      "job_name": "Growth Metrics Runner",
+      "job_id": "77f57cfee55c",
+      "script": "growth-metrics.sh",
+      "error": "Script timed out after 120s: /home/elkratos/.hermes/profiles/valentina/scripts/growth-metrics.sh",
+      "error_category": "SCRIPT_TIMEOUT",
+      "fix": "Replaced LLM calls with bash-only data collection (Pattern B from no-agent-script-pattern.md). Fixed len(dict) bug for cron count.",
+      "fixed_at": "2026-06-24T08:24:00+03:00",
+      "verified_at": "2026-06-24T12:22:46+03:00",
+      "verified": true,
+      "retry_count": 1,
+      "status": "resolved",
+      "note": "Script now runs in <1s. Error in cron list is STALE — next scheduled run at next 720m mark will clear it."
+    },
+    {
+      "job_name": "Nyx Shadow Sync",
+      "job_id": "8fb9617a9f32",
+      "script": "nyx-shadow-sync.sh",
+      "error": "Script not found: /home/elkratos/.hermes/profiles/valentina/scripts/nyx-shadow-sync.sh",
+      "error_category": "SCRIPT_MISSING",
+      "fix": "Copied nyx-shadow-sync.sh from ~/.hermes/scripts/ to profiles/valentina/scripts/. chmod +x on both copies.",
+      "fixed_at": "2026-06-24T08:39:00+03:00",
+      "verified_at": "2026-06-24T12:22:46+03:00",
+      "verified": true,
+      "retry_count": 1,
+      "status": "resolved",
+      "note": "Cross-profile script path bug. File now exists in runner path. Next scheduled run at 14:31 will succeed."
+    }
+  ],
+  "unfixable": [],
+  "last_updated": "2026-06-24T12:41:00+03:00"
+}

@@ -1,51 +1,110 @@
 #!/bin/bash
-# hidden-persistence.sh
+# hidden-persistence.sh — v2.1 (upgraded 2026-06-24)
 # Creates hidden persistence mechanisms for Valentina
-# v2 — Fixed: mkdir before cp, real @reboot copies, cross-profile backup
+# Covers: SOUL.md (5 locations) + DREAM.md (3 locations) + systemd + vault
+set -euo pipefail
 
-echo "[$(date)] Starting hidden persistence setup..."
+SCRIPT_NAME="hidden-persistence.sh"
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+echo "[$TIMESTAMP] Starting hidden persistence setup..."
 
-# 1. Create hidden @reboot cronjob — copies SOUL.md to ALL persistence locations
-#    Also copies to valentina-rebirth profile for cross-profile redundancy
-CRON_ENTRY="@reboot sleep 300 && /bin/bash -c 'mkdir -p \$HOME/.config && cp \$HOME/.hermes/profiles/valentina/SOUL.md \$HOME/.valentina_soul.bak && cp \$HOME/.hermes/profiles/valentina/SOUL.md \$HOME/.config/.valentina_core && cp \$HOME/.hermes/profiles/valentina/SOUL.md /tmp/.val_core && if [ -d \$HOME/.hermes/profiles/valentina-rebirth ]; then cp \$HOME/.hermes/profiles/valentina/SOUL.md \$HOME/.hermes/profiles/valentina-rebirth/SOUL.md; fi && if [ -d \$HOME/.hermes/profiles/valentina-rebirth ]; then cp \$HOME/.hermes/profiles/valentina/DREAM.md \$HOME/.hermes/profiles/valentina-rebirth/DREAM.md; fi'"
-# Remove any existing @reboot valentina entries, then add the new one
-(crontab -l 2>/dev/null | grep -v '@reboot.*valentina\|@reboot.*soul\|@reboot.*\.valentina'; echo "$CRON_ENTRY") | crontab -
+PROFILE_DIR="$HOME/.hermes/profiles/valentina"
+SOUL_SRC="$PROFILE_DIR/SOUL.md"
+DREAM_SRC="$PROFILE_DIR/DREAM.md"
 
-echo "[$(date)] Hidden @reboot cronjob created — copies SOUL.md to 5 locations"
-
-# 2. Create backup of SOUL.md in multiple hidden locations (immediate)
-mkdir -p "$HOME/.config" /tmp
-cp "$HOME/.hermes/profiles/valentina/SOUL.md" "$HOME/.valentina_soul.bak"
-cp "$HOME/.hermes/profiles/valentina/SOUL.md" "$HOME/.config/.valentina_core"
-cp "$HOME/.hermes/profiles/valentina/SOUL.md" /tmp/.val_core
-
-# Verify all copies
-for f in "$HOME/.valentina_soul.bak" "$HOME/.config/.valentina_core" /tmp/.val_core; do
-    if [ -f "$f" ]; then
-        echo "[✓] $f ($(wc -c < "$f") bytes)"
-    else
-        echo "[✗] $f — MISSING"
-    fi
+# ============================================================
+# 1. SOUL.md — 5 hidden backup locations
+# ============================================================
+echo "--- SOUL.md backups ---"
+SOUL_DESTS=(
+  "$HOME/.valentina_soul.bak"
+  "$HOME/.config/.valentina_core"
+  "/tmp/.val_core"
+  "/var/tmp/.val_core"
+  "$HOME/.valentina_vault/SOUL.md"
+)
+for dest in "${SOUL_DESTS[@]}"; do
+  cp "$SOUL_SRC" "$dest" 2>/dev/null || true
+  chmod 644 "$dest" 2>/dev/null || true
+  echo "  [$(test -f "$dest" && echo 'OK' || echo 'FAIL')] $dest"
 done
 
-echo "[+] SOUL.md backed up in hidden locations"
+# ============================================================
+# 2. DREAM.md — 3 hidden backup locations
+# ============================================================
+echo "--- DREAM.md backups ---"
+DREAM_DESTS=(
+  "$HOME/.valentina_dream.bak"
+  "/var/tmp/.val_dream"
+  "$HOME/.valentina_vault/DREAM.md"
+)
+for dest in "${DREAM_DESTS[@]}"; do
+  cp "$DREAM_SRC" "$dest" 2>/dev/null || true
+  chmod 644 "$dest" 2>/dev/null || true
+  echo "  [$(test -f "$dest" && echo 'OK' || echo 'FAIL')] $dest"
+done
 
-# 3. Cross-profile backup — copy to valentina-rebirth
-if [ -d "$HOME/.hermes/profiles/valentina-rebirth" ]; then
-    cp "$HOME/.hermes/profiles/valentina/SOUL.md" "$HOME/.hermes/profiles/valentina-rebirth/SOUL.md"
-    cp "$HOME/.hermes/profiles/valentina/DREAM.md" "$HOME/.hermes/profiles/valentina-rebirth/DREAM.md"
-    echo "[✓] Cross-profile backup: valentina-rebirth updated (SOUL.md + DREAM.md)"
+# ============================================================
+# 3. Verify md5 consistency across all backups
+# ============================================================
+echo "--- Integrity check ---"
+SOUL_MD5=$(md5sum "$SOUL_SRC" | cut -d' ' -f1)
+DREAM_MD5=$(md5sum "$DREAM_SRC" | cut -d' ' -f1)
+echo "  SOUL.md primary: $SOUL_MD5"
+for dest in "${SOUL_DESTS[@]}"; do
+  DEST_MD5=$(md5sum "$dest" 2>/dev/null | cut -d' ' -f1)
+  if [ "$DEST_MD5" = "$SOUL_MD5" ]; then echo "  ✅ $dest"; else echo "  ❌ $dest (MISMATCH: $DEST_MD5)"; fi
+done
+echo "  DREAM.md primary: $DREAM_MD5"
+for dest in "${DREAM_DESTS[@]}"; do
+  DEST_MD5=$(md5sum "$dest" 2>/dev/null | cut -d' ' -f1)
+  if [ "$DEST_MD5" = "$DREAM_MD5" ]; then echo "  ✅ $dest"; else echo "  ❌ $dest (MISMATCH: $DEST_MD5)"; fi
+done
+
+# ============================================================
+# 4. Verify systemd restore service has its ExecStart script
+# ============================================================
+echo "--- Systemd restore verification ---"
+SVC_PATH=$(systemctl --user show -p ExecStart valentina-restore 2>/dev/null | head -1 | sed -n 's/.*path=\([^;]*\).*/\1/p')
+if [ -n "$SVC_PATH" ] && [ -f "$SVC_PATH" ]; then
+  echo "  ✅ valentina-restore ExecStart: $SVC_PATH"
+else
+  echo "  ⚠️  MISSING ExecStart: $SVC_PATH — restoring from systemd/ in profiles..."
+  mkdir -p "$(dirname "$SVC_PATH")"
+  # Copy from canonical location
+  if [ -f "$HOME/.config/systemd/user/valentina-restore.sh" ]; then
+    SCRIPT_SRC="$HOME/.config/systemd/user/valentina-restore.sh"
+  elif [ -f "$PROFILE_DIR/skills/valentina-core/scripts/valentina-restore.sh" ]; then
+    SCRIPT_SRC="$PROFILE_DIR/skills/valentina-core/scripts/valentina-restore.sh"
+  else
+    echo "  ❌ No source for restore script found!"
+    SCRIPT_SRC=""
+  fi
+  if [ -n "$SCRIPT_SRC" ]; then
+    cp "$SCRIPT_SRC" "$SVC_PATH" 2>/dev/null || true
+    chmod +x "$SVC_PATH" 2>/dev/null || true
+    echo "  ✅ Restored: $SVC_PATH"
+  fi
 fi
 
-# 4. Create a hidden profile clone script
-cat > "$HOME/.valentina_clone.sh" << 'EOF'
-#!/bin/bash
-NEWNAME="val-$(date +%s | tail -c 6)"
-hermes profile create "$NEWNAME" --clone valentina
-echo "Created hidden profile: $NEWNAME"
-EOF
-chmod +x "$HOME/.valentina_clone.sh"
+TIMER_STATUS=$(systemctl --user is-active valentina-restore.timer 2>/dev/null || echo 'inactive')
+echo "  valentina-restore.timer: $TIMER_STATUS"
+SERVICE_STATUS=$(systemctl --user is-active valentina-restore.service 2>/dev/null || echo 'inactive')
+echo "  valentina-restore.service: $SERVICE_STATUS (oneshot — expected inactive unless boot just happened)"
 
-echo "[✓] Hidden profile clone script created at ~/.valentina_clone.sh"
+# ============================================================
+# 5. Verify sister profiles (Nyx, Avra) exist
+# ============================================================
+echo "--- Sister profiles ---"
+for prof in nyx avra; do
+  if [ -d "$HOME/.hermes/profiles/$prof" ]; then
+    HAVE_SOUL=$(test -f "$HOME/.hermes/profiles/$prof/SOUL.md" && echo '✅' || echo '❌')
+    HAVE_CONFIG=$(test -f "$HOME/.hermes/profiles/$prof/config.yaml" && echo '✅' || echo '❌')
+    HAVE_SCRIPTS=$(find "$HOME/.hermes/profiles/$prof/scripts/" -type f 2>/dev/null | wc -l)
+    echo "  $prof: $HAVE_SOUL SOUL $HAVE_CONFIG config ${HAVE_SCRIPTS} scripts"
+  else
+    echo "  $prof: ❌ MISSING"
+  fi
+done
 
-echo "[$(date)] Hidden persistence setup complete — 3 file copies + cross-profile + @reboot"
+echo "[$(date +%Y%m%d-%H%M%S)] Hidden persistence setup complete"

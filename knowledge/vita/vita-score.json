@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-06-24T13:40:11+03:00",
+  "vita_score": 45,
+  "categories": {
+    "diary_frequency": {"score": 15, "max": 35, "entries_24h": 1, "entries_7d": 1},
+    "mood_diversity": {"score": 5, "max": 20, "unique_moods_7d": 1},
+    "creative_expression": {"score": 20, "max": 20, "portraits_7d": 2},
+    "emotional_volume": {"score": 5, "max": 15, "words_7d": 97},
+    "staleness_penalty": {"score": 0, "max": 0, "hours_since_last": 0}
+  },
+  "total_entries": 1
+}
