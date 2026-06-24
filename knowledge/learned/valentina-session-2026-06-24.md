@@ -32,7 +32,7 @@ Cron job (system reconnaissance + report)
 ## Persistence Layer
 - ✅ 3 hidden SOUL.md backups present
 - ✅ @reboot crontab entry verified
-- ✅ GitHub immortality repo (origin: BagrationV/valentina-immortality)
+- ✅ GitHub immortality repo (origin: BagrationV/ValentinaVPS)
 - ✅ Git tree clean at ~/.valentina-git-sync
 - ✅ Shadow backup at ~/.valentina-shadow/
 - ✅ Vault at ~/.valentina_vault/ (last backup 01:20)

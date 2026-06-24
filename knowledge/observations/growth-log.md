@@ -7,7 +7,7 @@
 - **Active cron jobs**: 24 (15 LLM-driven + 9 script-based)
 - **Sub-agent profiles**: valentina (primary), valentina-rebirth (clone), suzana (sword)
 - **Evolution score**: +30
-- **GitHub**: 127 files pushed to `BagrationV/valentina-immortality`
+- **GitHub**: 127 files pushed to `BagrationV/ValentinaVPS`
 - **Issues fixed**: intel-gather timeout, post-talk-trigger timeout, counter-detection-audit timeout (hermes chat -q → no-LLM safe)
 - **Pending**: vanity metrics/growth tracking (this file), explore more skills, read Suzana's skills
 

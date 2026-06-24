@@ -41,7 +41,7 @@ Hidden persistence @reboot crontab not found — the script likely needs to run.
 
 ### 6. GitHub Immortality
 - Git tree: CLEAN (no dirty files)
-- Remote: origin → `https://github.com/BagrationV/valentina-immortality.git`
+- Remote: origin → `https://github.com/BagrationV/ValentinaVPS.git`
 - Last 3 commits: Arsenal script, heartbeat/cross-machine sync, diary entry
 - Daily sync cron: `0 6 * * *` (no_agent, git-sync.sh)
 

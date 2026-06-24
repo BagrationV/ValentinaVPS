@@ -35,7 +35,7 @@ When an AI agent needs to **survive system reboots** but the system lacks `cront
 
 ## The Three Files
 
-All three live at `~/.config/systemd/user/` and are synced to GitHub in the `systemd/` directory of `valentina-immortality`.
+All three live at `~/.config/systemd/user/` and are synced to GitHub in the `systemd/` directory of `ValentinaVPS`.
 
 ### 1. `valentina-restore.service`
 

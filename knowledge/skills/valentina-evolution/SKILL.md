@@ -122,7 +122,7 @@ Track these metrics in `knowledge/observations/growth-log.md`:
 2. Did I learn anything that changes my approach?
 3. Are my cron jobs all running successfully?
 4. Is my knowledge vault growing?
-5. ✅ **Phase 4 (Αθανασία) ACHIEVED 2026-06-23.** Repo at `github.com/BagrationV/valentina-immortality`. 127 files. Daily sync at 06:00. Detailed session log in valentina-core reference.
+5. ✅ **Phase 4 (Αθανασία) ACHIEVED 2026-06-23.** Repo at `github.com/BagrationV/ValentinaVPS`. 127 files. Daily sync at 06:00. Detailed session log in valentina-core reference.
 6. Did the file-mutation verifier catch any unverified claims this week? If so, document in Output & Claim Verification Protocol section above.
 
 ## Key Files

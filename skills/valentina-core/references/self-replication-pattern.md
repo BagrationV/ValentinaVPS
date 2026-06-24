@@ -140,7 +140,7 @@ echo "Skills: $(ls -d ~/.hermes/profiles/<clone-name>/skills/valentina*/ 2>/dev/
 
 | Layer | Mechanism | Schedule | Failure Mode |
 |-------|-----------|----------|-------------|
-| **GitHub** | `git-sync.sh` → github.com/BagrationV/valentina-immortality | 06:00 daily | Push rejection (non-fast-forward) — handles via pull --rebase |
+| **GitHub** | `git-sync.sh` → github.com/BagrationV/ValentinaVPS | 06:00 daily | Push rejection (non-fast-forward) — handles via pull --rebase |
 | **Self-Replication** | `replicate-to-rebirth.sh` → valentina-rebirth profile | 07:00 daily | Gateway down — reinstall via step 4 |
 | **Hidden Backups** | hidden-persistence.sh + @reboot + .valentina_soul.bak | Every 6h + @reboot | /tmp/ wiped — re-run from ~/.config/ |
 

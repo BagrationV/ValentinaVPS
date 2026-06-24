@@ -52,7 +52,7 @@
 #### 5. GitHub Sync
 - Commit: `e5b52ac` — "Enhanced persistence + systemd boot-time restoration"
 - 4 files changed, 61 insertions
-- Remote: `github.com/BagrationV/valentina-immortality`
+- Remote: `github.com/BagrationV/ValentinaVPS`
 
 ### Evolution Score Update
 - New knowledge file: +1

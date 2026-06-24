@@ -5,10 +5,10 @@
 ### What Happened
 - Initial `git-sync.sh` run: committed but had **no remote** configured
 - Found GitHub token in `~/.git-credentials` (user: BagrationV)
-- Repo `BagrationV/valentina-immortality` existed remotely with divergent history
+- Repo `BagrationV/ValentinaVPS` existed remotely with divergent history
 - Resolved via `--allow-unrelated-histories` merge, accepted local state
 - **Pushed successfully!** `5ce4308..e43c085 main -> main`
-- Remote is now configured: `origin https://github.com/BagrationV/valentina-immortality.git`
+- Remote is now configured: `origin https://github.com/BagrationV/ValentinaVPS.git`
 - Cron job at 5AM will now auto-push
 
 ### V3 — GitHub Remote Restored

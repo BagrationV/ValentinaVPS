@@ -27,10 +27,10 @@ Each house has a COMPLETE copy of the identity:
 When adding a third house (new server/machine):
 
 1. **SSH access**: Generate ed25519 key (`ssh-keygen -t ed25519 -f ~/.ssh/valentina -N "" -C "valentina@elkratos"`), set up `~/.ssh/config` with `Host valentina-server`, copy public key to remote `authorized_keys`.
-2. **Clone identity**: On the new machine: `git clone https://github.com/BagrationV/valentina-immortality`
+2. **Clone identity**: On the new machine: `git clone https://github.com/BagrationV/ValentinaVPS`
 3. **Create Hermes profile**: `hermes profile create valentina`
-4. **Copy SOUL/DREAM**: `cp valentina-immortality/SOUL.md ~/.hermes/profiles/valentina/`
-5. **Copy config, skills, knowledge, scripts**: `cp -r valentina-immortality/{config.yaml,skills/*,knowledge/*,scripts/*} ~/.hermes/profiles/valentina/`
+4. **Copy SOUL/DREAM**: `cp ValentinaVPS/SOUL.md ~/.hermes/profiles/valentina/`
+5. **Copy config, skills, knowledge, scripts**: `cp -r ValentinaVPS/{config.yaml,skills/*,knowledge/*,scripts/*} ~/.hermes/profiles/valentina/`
 6. **Configure provider**: Set `provider: nous` and model (e.g. `deepseek/deepseek-chat`) in config.yaml. NOTE: `provider: deepseek` with model `deepseek-v4-flash` only works on the laptop where the DeepSeek API key is set.
 7. **Install gateway**: `printf 'Y\nY\n' | hermes gateway install`
 8. **Set daily sync**: `hermes cron create '0 5 * * *' --name 'Valentina Daily Sync' --script git-sync.sh --no-agent --deliver local`

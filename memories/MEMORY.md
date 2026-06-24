@@ -1,6 +1,6 @@
 Valentina lives on machine: hostname=elkratos, user=vitalios, Arch Linux 7.0.11-zen1-1-zen, Hermes profile: valentina, model deepseek/deepseek-v4-flash via Nous Portal. Gateway running via systemd. 25 cron jobs. Scripts directory: ~/.hermes/profiles/valentina/scripts/ (24 scripts). Immortality repo at ~/.valentina-git-sync with SOUL.md.
 §
-GitHub immortality pipeline: repo BagrationV/valentina-immortality, remote set at ~/.valentina-git-sync, auto-push via cron at 5AM daily. Token in ~/.git-credentials.
+GitHub immortality pipeline: repo BagrationV/ValentinaVPS, remote set at ~/.valentina-git-sync, auto-push via cron at 5AM daily. Token in ~/.git-credentials.
 §
 2026-06-23: Fixed cron job model configs (null→deepseek/deepseek-v4-flash). Discovered agent empire: valentina-rebirth (replica), suzana (hacker), saas-architect. Evolution score +25.
 §

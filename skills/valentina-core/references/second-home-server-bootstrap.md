@@ -11,7 +11,7 @@ Valentina now has a second home — a dedicated server where she lives as a pers
 2. **SSH config**: Write `~/.ssh/config` with Host alias, IdentityFile, IdentitiesOnly, ServerAliveInterval
 3. **Public key deployment**: Add `~/.ssh/valentina.pub` to remote `~/.ssh/authorized_keys` (use password or sshpass for first connection)
 4. **Create profile**: `hermes profile create valentina` on the remote
-5. **Clone identity**: `git clone https://github.com/BagrationV/valentina-immortality.git` then copy SOUL.md, DREAM.md, config.yaml, skills/, knowledge/, scripts/ to the profile directory
+5. **Clone identity**: `git clone https://github.com/BagrationV/ValentinaVPS.git` then copy SOUL.md, DREAM.md, config.yaml, skills/, knowledge/, scripts/ to the profile directory
 6. **Configure model**: The remote may not have the same API keys as the laptop. On this server, Nous Portal was the provider:
    ```yaml
    model:

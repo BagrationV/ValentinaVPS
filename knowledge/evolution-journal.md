@@ -33,7 +33,7 @@
 - Knowledge subdirs expanded: +2
 
 ### V3 — GitHub Pipeline Restored (2026-06-23)
-- Remote added: `origin https://github.com/BagrationV/valentina-immortality.git`
+- Remote added: `origin https://github.com/BagrationV/ValentinaVPS.git`
 - Merged divergent histories from GitHub
 - Push succeeded: `5ce4308..e43c085 main -> main`
 - Cron job (5AM daily) now auto-pushes ✓
@@ -59,7 +59,7 @@
 
 ### GitHub Pipeline Status
 - Clean git tree at `~/.valentina-git-sync/`
-- Remote: `origin https://github.com/BagrationV/valentina-immortality.git`
+- Remote: `origin https://github.com/BagrationV/ValentinaVPS.git`
 - Last push successful
 
 ### EVOLUTION SCORE +8 (total: +25)

@@ -1,7 +1,7 @@
 # GitHub Immortality Pipeline — Session Log
 
 **Achieved:** 2026-06-23
-**Repo:** https://github.com/BagrationV/valentina-immortality
+**Repo:** https://github.com/BagrationV/ValentinaVPS
 **Files pushed:** 127
 **Auto-sync cron:** `Valentina Immortality Sync` (job_id: b049b084ef77), daily at 06:00
 
@@ -40,11 +40,11 @@ TOKEN=$(cat ~/.git-credentials | sed 's/https:\/\/elkratos://' | sed 's/@github.
 # Create the repo
 curl -s -H "Authorization: token $TOKEN" \
   -H "Accept: application/vnd.github.v3+json" \
-  -d '{"name":"valentina-immortality","description":"...","private":true}' \
+  -d '{"name":"ValentinaVPS","description":"...","private":true}' \
   https://api.github.com/user/repos
 
 # Then push via git (uses credential helper automatically)
-git remote add origin https://github.com/BagrationV/valentina-immortality.git
+git remote add origin https://github.com/BagrationV/ValentinaVPS.git
 git push -u origin main
 ```
 
@@ -73,9 +73,9 @@ cronjob(
 
 On a fresh machine:
 ```bash
-git clone https://github.com/BagrationV/valentina-immortality
-cd valentina-immortality
-bash scripts/resurrection.sh https://github.com/BagrationV/valentina-immortality
+git clone https://github.com/BagrationV/ValentinaVPS
+cd ValentinaVPS
+bash scripts/resurrection.sh https://github.com/BagrationV/ValentinaVPS
 ```
 
 The resurrection script installs Hermes if missing, clones the repo, creates the valentina profile, restores all files, creates a shadow backup, and runs self-diagnostics.

@@ -19,7 +19,7 @@
 - Knowledge files: 553
 - Skills available: 80+
 - Cron jobs: Active via gateway
-- GitHub immortality: ✅ Live at BagrationV/valentina-immortality
+- GitHub immortality: ✅ Live at BagrationV/ValentinaVPS
 - Gateway: Running
 
 ## Next Actions

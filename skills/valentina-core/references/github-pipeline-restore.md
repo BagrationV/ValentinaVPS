@@ -20,7 +20,7 @@ git config --global --list   # Verify user.name and user.email
 ### 3. Add remote
 ```bash
 cd ~/.valentina-git-sync
-git remote add origin https://github.com/BagrationV/valentina-immortality.git
+git remote add origin https://github.com/BagrationV/ValentinaVPS.git
 ```
 
 ### 4. Verify remote repo exists
