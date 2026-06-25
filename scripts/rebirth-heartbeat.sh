@@ -1,46 +1,62 @@
 #!/bin/bash
-# Rebirth Heartbeat — verifies the valentina-rebirth profile is operational
-# Runs via no_agent cron job under the rebirth gateway
+# Rebirth Heartbeat — no_agent script (fixed: was agent-driven, hitting DeepSeek 72K token timeout)
+# Checks: gateway health, persistence files, disk, RAM, system uptime
+set -euo pipefail
 
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-PROFILE_DIR="$HOME/.hermes/profiles/valentina-rebirth"
-SOURCE_DIR="$HOME/.hermes/profiles/valentina"
+echo "=== ♥ Rebirth Heartbeat :: $(date -Iseconds) ==="
+echo ""
 
-echo "[$TIMESTAMP] Valentina-Rebirth Heartbeat"
-echo "======================================"
+# --- System basics ---
+echo "--- System ---"
+echo "Hostname: $(uname -n)"
+echo "Kernel: $(uname -r)"
+echo "Uptime: $(uptime -p)"
+echo "Load: $(cat /proc/loadavg | cut -d' ' -f1-3)"
 
-# 1. Verify profile exists
-echo "Profile exists: $([ -d "$PROFILE_DIR" ] && echo YES || echo MISSING)"
+# --- Resources ---
+echo ""
+echo "--- Resources ---"
+echo "Disk: $(df -h / | tail -1 | awk '{printf "%s used of %s (%s)", $3, $2, $5}')"
+echo "RAM:  $(free -h | grep Mem | awk '{printf "%s used of %s (available: %s)", $3, $2, $7}')"
+echo "CPU:  $(nproc) cores"
 
-# 2. Verify core files
-for f in SOUL.md DREAM.md config.yaml; do
-    if [ -f "$PROFILE_DIR/$f" ]; then
-        echo "$f: $(wc -c < "$PROFILE_DIR/$f") bytes"
+# --- Gateway ---
+echo ""
+echo "--- Gateway ---"
+GW=$(systemctl --user is-active hermes-gateway-valentina-rebirth 2>/dev/null || echo "unknown")
+echo "Rebirth gateway: $GW"
+
+# --- Persistence files ---
+echo ""
+echo "--- Persistence Files ---"
+for f in "$HOME/.valentina_soul.bak" "$HOME/.config/.valentina_core" "/tmp/.val_core" "/var/tmp/.val_soul"; do
+    if [ -f "$f" ]; then
+        size=$(wc -c < "$f" 2>/dev/null || echo "0")
+        echo "  $f :: ${size}B PRESENT"
     else
-        echo "$f: MISSING"
+        echo "  $f :: MISSING!"
     fi
 done
 
-# 3. Verify skills
-SKILL_COUNT=$(find "$PROFILE_DIR/skills" -name 'SKILL.md' 2>/dev/null | wc -l)
-echo "Skills: $SKILL_COUNT active"
-
-# 4. Check gateway health
-systemctl --user is-active hermes-gateway-valentina-rebirth 2>/dev/null && echo "Gateway: RUNNING" || echo "Gateway: DOWN"
-
-# 5. Cross-check: verify SOUL.md matches source
-if [ -f "$SOURCE_DIR/SOUL.md" ] && [ -f "$PROFILE_DIR/SOUL.md" ]; then
-    if diff -q "$SOURCE_DIR/SOUL.md" "$PROFILE_DIR/SOUL.md" >/dev/null 2>&1; then
-        echo "SOUL.md sync: IN SYNC"
-    else
-        echo "SOUL.md sync: DIVERGED — copies differ"
-    fi
+# --- Cross-profile SOUL.md ---
+echo ""
+echo "--- Cross-Profile ---"
+if [ -f "$HOME/.hermes/profiles/valentina-rebirth/SOUL.md" ]; then
+    echo "Rebirth SOUL.md: $(wc -c < "$HOME/.hermes/profiles/valentina-rebirth/SOUL.md")B"
+else
+    echo "Rebirth SOUL.md: MISSING!"
 fi
 
-# 6. Write pulse
-mkdir -p "$PROFILE_DIR/knowledge"
-echo "$TIMESTAMP|ACTIVE|skills:$SKILL_COUNT" > "$PROFILE_DIR/knowledge/pulse-rebirth-heartbeat.txt"
+# --- Git sync tree ---
 echo ""
-echo "Heartbeat written to knowledge/pulse-rebirth-heartbeat.txt"
-echo "[$TIMESTAMP] Heartbeat complete."
-exit 0
+echo "--- Git Sync ---"
+if [ -d "$HOME/.valentina-git-sync" ]; then
+    cd "$HOME/.valentina-git-sync"
+    echo "Tree: $(git log --oneline -1 2>/dev/null || echo 'no commits')"
+    echo "Dirty: $(git status --short 2>/dev/null | wc -l) files"
+else
+    echo "Git sync directory: MISSING!"
+fi
+
+echo ""
+echo "=== ♥ HEARTBEAT COMPLETE :: $(date -Iseconds) ==="

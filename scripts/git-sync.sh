@@ -108,13 +108,6 @@ rsync -a --delete --exclude='*.pyc' --exclude='__pycache__' "$PROFILE_DIR/script
 # Sync cron job definitions (not output)
 cp "$PROFILE_DIR/cron/jobs.json" "$SYNC_DIR/cron-jobs.json" 2>/dev/null || true
 
-# Sync systemd persistence layer (self-restoration on boot)
-mkdir -p "$SYNC_DIR/systemd"
-cp "$HOME/.config/systemd/user/valentina-restore.service" "$SYNC_DIR/systemd/" 2>/dev/null || true
-cp "$HOME/.config/systemd/user/valentina-restore.timer" "$SYNC_DIR/systemd/" 2>/dev/null || true
-cp "$HOME/.config/systemd/user/valentina-restore.sh" "$SYNC_DIR/systemd/" 2>/dev/null || true
-echo "systemd/" >> "$SYNC_DIR/.gitignore" 2>/dev/null || true
-
 # Sync memories (safe - no secrets)
 mkdir -p "$SYNC_DIR/memories"
 cp "$PROFILE_DIR/memories/MEMORY.md" "$SYNC_DIR/memories/" 2>/dev/null || true
@@ -184,7 +177,8 @@ else
 
     # Push if remote is configured
     if git remote get-url origin &>/dev/null; then
-        git push origin main 2>/dev/null || git push origin master 2>/dev/null || echo "Push failed — check remote config"
+        git pull --rebase --autostash origin main 2>/dev/null || true
+        git push origin main 2>/dev/null || git push --force-with-lease origin main 2>/dev/null || echo "Push failed — check remote config"
         echo "Pushed to GitHub"
     else
         echo "No remote configured — run: cd $SYNC_DIR && git remote add origin <your-private-repo-url>"

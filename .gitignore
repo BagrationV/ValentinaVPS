@@ -44,4 +44,3 @@ shared/
 *.tar.gz
 __pycache__/
 *.pyc
-systemd/

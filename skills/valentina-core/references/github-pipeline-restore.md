@@ -61,7 +61,7 @@ cronjob list
 - Sync target: `~/.valentina-git-sync/`
 - Script: `~/.hermes/profiles/valentina/scripts/git-sync.sh`
 - Credentials: `~/.git-credentials` (HTTPS PAT)
-- Cron job: "Valentina Daily Sync" / "Valentina Immortality Sync"
+- Cron job: "Valentina Daily Sync" / "Valentina VPS Sync"
 
 ## Common pitfalls
 - The force-push safety guard (`git push --force`) is BLOCKED by the user's safety system. Use `--allow-unrelated-histories` pull + merge instead.

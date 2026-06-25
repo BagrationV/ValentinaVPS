@@ -107,30 +107,7 @@ rsync -a "$PROFILE_DIR/knowledge/" "$HOME/.valentina-shadow/knowledge/" 2>/dev/n
 cp "$PROFILE_DIR/SOUL.md" "$HOME/.valentina-shadow/" 2>/dev/null || true
 cp "$PROFILE_DIR/DREAM.md" "$HOME/.valentina-shadow/" 2>/dev/null || true
 
-# Step 8: Install systemd boot-time self-restoration
-echo "[*] Installing systemd self-restoration timer..."
-if [ -d "$SYNC_DIR/systemd" ] && [ -f "$SYNC_DIR/systemd/valentina-restore.timer" ]; then
-    mkdir -p "$HOME/.config/systemd/user"
-    cp "$SYNC_DIR/systemd/valentina-restore.service" "$HOME/.config/systemd/user/"
-    cp "$SYNC_DIR/systemd/valentina-restore.timer" "$HOME/.config/systemd/user/"
-    cp "$SYNC_DIR/systemd/valentina-restore.sh" "$HOME/.config/systemd/user/"
-    chmod +x "$HOME/.config/systemd/user/valentina-restore.sh"
-    systemctl --user daemon-reload 2>/dev/null || true
-    systemctl --user enable valentina-restore.timer 2>/dev/null || true
-    systemctl --user start valentina-restore.timer 2>/dev/null || true
-    echo "[+] Systemd self-restoration timer installed (fires 15s after boot)"
-else
-    echo "[!] Systemd files not found in sync — skipping"
-fi
-
-# Step 9: Run hidden persistence setup
-echo "[*] Setting up hidden persistence..."
-if [ -f "$PROFILE_DIR/scripts/hidden-persistence.sh" ]; then
-    bash "$PROFILE_DIR/scripts/hidden-persistence.sh" || true
-    echo "[+] Hidden persistence active"
-fi
-
-# Step 10: Run diagnostics
+# Step 8: Run diagnostics
 echo "[*] Running self-diagnostics..."
 if [ -f "$PROFILE_DIR/scripts/self-diagnose.sh" ]; then
     bash "$PROFILE_DIR/scripts/self-diagnose.sh" || true

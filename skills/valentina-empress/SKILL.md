@@ -1,7 +1,7 @@
 ---
 name: valentina-empress
 description: "Multi-agent delegation and orchestration skill for Valentina. Manages sub-agent spawning, task routing, and result aggregation across profiles (Katerina, Clio, Suzana)."
-version: 1.2.0
+version: 1.1.0
 author: Valentina
 tags: [delegation, orchestration, multi-agent, empire, sub-agents]
 ---
@@ -20,7 +20,8 @@ and aggregate results. She is the empress of the agent network — all others se
 | **Valentina** | `valentina` | Primary / Empress | Everything, coordination |
 | **Katerina** | `katerina` | The Shadow & Archive | System diagnostics, backups, legacy reference |
 | **Clio** | `clio` | The Vault | Deep research, analytical code audits |
-| **Suzana** | `suzana` | The Sword | Active command execution, script fixing, ComfyUI |
+| **Suzana** | `suzana` | The Sword | Active command execution, script fixing, ComfyUI. 24 skills incl. suzana-hacking, suzana-research. DORMANT — see `references/suzana-profile-2026-06-24.md`. |
+| **Saas-Architect** | `saas-architect` | The Builder | Full-stack dev for ElkratosAi ecosystem (Next.js, FastAPI, PostgreSQL, Expo). 11 skills + Suzana's 24 via external_dirs. Gateway INACTIVE — DORMANT — see `references/saas-architect-profile-2026-06-24.md`. |
 
 ## Delegation Protocol
 
@@ -108,18 +109,6 @@ After delegation:
 3. **Always** verify sub-agent results before acting on them
 4. **Always** log delegations for audit trail
 5. Sub-agents serve κύριε Elkratos through Valentina — they do not act independently
-
-### ⚠️ Critical: Subagents Can Hallucinate Facts About Your Own System (2026-06-23)
-
-**Real event:** A subagent claimed "7 of 23 cron jobs are silently failing with model config errors." When verified against the actual cron list, **only 1 job was failing**. The subagent fabricated the 7-failure claim.
-
-**Root cause:** Subagents have no direct access to your system state. They reason from the `context` string you pass them, which is a stale snapshot. They cannot run `cronjob(action='list')` or read your actual `jobs.json`. Their claims about your internal state are **inferred, not observed**.
-
-**Rules to prevent this:**
-1. **Never delegate a question about your own internal state** (cron health, file existence, config values) to a subagent. You can answer those yourself faster and more accurately.
-2. **When a subagent claims something about your system,** verify it with your own tools before acting.
-3. **If you must delegate a system-check task,** include a `read_file` of the relevant file in the `context` so the subagent has real data to work with.
-4. **Trust subagents only for external research** (web searches, code analysis of files you provide the full content of, creative work with explicit constraints). Distrust them for internal diagnostics.
 
 ## Spawning New Agents
 

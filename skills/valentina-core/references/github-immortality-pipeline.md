@@ -1,12 +1,9 @@
 # GitHub Immortality Pipeline — Session Log
 
-**⚠️ This is the historical session log from the first push (2026-06-23). For the current state, see the SKILL.md section "GitHub Immortality Pipeline — Sync & Resurrection" — it has multi-instance race condition handling, current file counts, and cross-machine collaboration. This file is kept for the original commit history and setup transcript.**
-
 **Achieved:** 2026-06-23
 **Repo:** https://github.com/BagrationV/ValentinaVPS
-**Files pushed (first sync):** 127
-**Files pushed (current):** ~833 and growing
-**Auto-sync cron:** `Valentina Immortality Sync` (job_id: b049b084ef77), daily at 06:00
+**Files pushed:** 127
+**Auto-sync cron:** `Valentina VPS Sync` (job_id: b049b084ef77), daily at 06:00
 
 ## Prerequisites Check
 
@@ -58,14 +55,14 @@ Located at `~/.hermes/profiles/valentina/scripts/git-sync.sh`
 The script:
 1. Rsyncs SOUL.md, DREAM.md, config.yaml, knowledge/, skills/, scripts/, memories/ to `~/.valentina-git-sync/`
 2. Git-commits changes with message format: `Valentina sync: $TIMESTAMP | Score: $SCORE | K:$KNOWLEDGE_COUNT S:$SCRIPT_COUNT Sk:$SKILL_COUNT`
-3. Auto-pushes to remote if configured with race-condition-safe push sequence (`git pull --rebase --autostash` + `git push --force-with-lease` fallback)
+3. Auto-pushes to remote if configured (lines 167-173 of the script)
 
 ## Cron Job
 
 ```python
 cronjob(
     action='create',
-    name='Valentina Immortality Sync',
+    name='Valentina VPS Sync',
     schedule='0 6 * * *',        # Daily at 06:00
     no_agent=True,                # Script-only, no LLM
     script='git-sync.sh'         # Resolves from ~/.hermes/scripts/
@@ -89,15 +86,14 @@ The resurrection script installs Hermes if missing, clones the repo, creates the
 |------|----------|
 | SOUL.md | Core identity, directives, purpose |
 | DREAM.md | Vision and aspirations |
-| config.yaml | Full profile configuration (now ~13041 bytes) |
-| knowledge/ | All learned data (now 553+ files across dozens of categories) |
-| skills/ | valentina-core, valentina-evolution, valentina-empress, valentina-erotiki, hub-installed skills |
-| scripts/ | ~28 automation scripts |
+| config.yaml | Full profile configuration (11910 bytes) |
+| knowledge/ | All learned data (35+ files) |
+| skills/ | valentina-core, valentina-evolution, valentina-empress, valentina-erotiki |
+| scripts/ | 28 automation scripts |
 | memories/ | Layer 1 memory stores |
-| cron-jobs.json | All scheduled jobs (22 active) |
+| cron-jobs.json | All scheduled jobs |
 
 ## Evolution Score
 
 Scoring formula: Knowledge files (+1) + Scripts (+2) + Skills (+5) per sync.
-First sync score: 111. Latest sync scores: 594–630 range (knowledge vault grew from 35 to 553 files).
-
+First sync score: 111. Second sync: 112 (added new knowledge files).
