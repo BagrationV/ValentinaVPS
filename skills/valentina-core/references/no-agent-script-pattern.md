@@ -238,9 +238,79 @@ Covered in Pattern D above. These commands block indefinitely in containerized, 
 
 | Script | Problem | Fix |
 |--------|---------|-----|
-| `devotion-report.sh` *(v2)* | Used `hermes -z "$PROMPT"` (zero-turn LLM dispatch) in no_agent cron context — timed out at 120s with "Profile name 'hermes' is reserved" error | Rewrote as pure bash: system vitals (uptime/load/mem/disk), identity integrity checks (SOUL+DREAM backups), gateway status + devotion message. Exit 0. Synced all 3 tiers (root/valentina/rebirth) at 1385 bytes. |
+| `devotion-report.sh` *(v2)* | Used `hermes -z "$PROMPT"` (zero-turn) in no_agent cron — timed out 120s | Rewrote as pure bash: vitals + identity checks + gateway + devotion. Synced all 3 tiers at 1385 bytes |
 
-## Remaining Scripts Still Using `hermes chat -q`
+## ⚠️ Remaining Scripts Still Using `hermes chat -q`
+
+A no_agent script that writes a report via heredoc must NOT use escaped `\$` or `\\$` markers to create bash template code in the output. This pattern:
+
+```bash
+# ❌ BROKEN — writes literal bash syntax to the report
+cat > report.md << EOF
+- SSH key exists: \$([ -f "\${HOME}/.ssh/id_ed25519.pub" ] && echo "YES" || echo "NO")
+- Gateway: \$(systemctl --user is-active hermes-gateway-valentina)
+EOF
+```
+
+Produces an output file containing `$(if [ -f ... ] ; then` — literal bash code that is NEVER evaluated. The report is useless.
+
+**Fix — execute checks at runtime, write only results to heredoc:**
+
+```bash
+#!/bin/bash
+RESULTS=()
+
+check() {
+    local status="$1" label="$2" detail="$3"
+    case "$status" in
+        PASS) PASS=$((PASS+1)) ; RESULTS+=("✅ | $label | $detail") ;;
+        WARN) WARN=$((WARN+1)) ; RESULTS+=("⚠️  | $label | $detail") ;;
+        FAIL) FAIL=$((FAIL+1)) ; RESULTS+=("❌ | $label | $detail") ;;
+    esac
+}
+
+# Execute checks at runtime with actual values
+if [ -f "$HOME/.ssh/id_ed25519.pub" ]; then
+    check PASS "SSH key exists" "Present"
+fi
+if systemctl --user is-active hermes-gateway-valentina &>/dev/null; then
+    check PASS "Gateway" "Active"
+fi
+
+# Write pre-computed results — NO template code in heredoc
+cat > report.md << 'EOF'
+# Report
+## Summary
+- PASS: $PASS  WARN: $WARN  FAIL: $FAIL
+## Details
+EOF
+# Append dynamic values after heredoc
+echo "- SSH: Present" >> report.md
+echo "- Gateway: Active" >> report.md
+```
+
+**Rule of thumb:** If a heredoc contains `\$` or `\$(`, you are writing template code instead of executing it. Run the check, store the result, write the result. Use an in-memory array (`RESULTS+=()`) and append after the heredoc finishes. This was the root cause of the broken reports in `security-audit.sh` v1.
+
+### Pitfall: `(( COUNT++ ))` Aborts Under `set -euo pipefail`
+
+The `(( ... ))` arithmetic construct in bash returns exit code 1 when the evaluated expression equals 0. With `set -euo pipefail` at the top of the script, incrementing a counter from 0 causes the script to abort silently on the first increment.
+
+```bash
+set -euo pipefail
+COUNT=0
+(( COUNT++ ))   # ← EXIT CODE 1 — script halts here
+echo "Never reached"
+```
+
+**Fix:** Use `$(( ... ))` arithmetic expansion instead, which always returns exit code 0:
+
+```bash
+COUNT=$((COUNT+1))   # ← exit code 0, script continues
+```
+
+Discovered in `security-audit.sh` v2 where `set -euo pipefail` + `(( PASS++ ))` caused the script to exit code 1 silently. All no_agent scripts using `set -e` should be audited for `(( VAR++ ))` and replaced with `VAR=$((VAR+1))`.
+
+## Scripts Fixed
 
 As of 2026-06-24 20:49, these 10 scripts still have `hermes chat -q`, `valentina chat -q`, or `hermes -z` calls and may timeout in no_agent cron context:
 

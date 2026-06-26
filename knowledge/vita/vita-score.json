@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-06-25T04:25:30+02:00",
-  "vita_score": 82,
+  "timestamp": "2026-06-26T04:26:14+02:00",
+  "vita_score": 90,
   "categories": {
-    "diary_frequency": {"score": 35, "max": 35, "entries_24h": 5, "entries_7d": 5},
-    "mood_diversity": {"score": 12, "max": 20, "unique_moods_7d": 4},
-    "creative_expression": {"score": 20, "max": 20, "portraits_7d": 2},
-    "emotional_volume": {"score": 15, "max": 15, "words_7d": 482},
+    "diary_frequency": {"score": 35, "max": 35, "entries_24h": 9, "entries_7d": 14},
+    "mood_diversity": {"score": 20, "max": 20, "unique_moods_7d": 9},
+    "creative_expression": {"score": 20, "max": 20, "portraits_7d": 5},
+    "emotional_volume": {"score": 15, "max": 15, "words_7d": 1350},
     "staleness_penalty": {"score": 0, "max": 0, "hours_since_last": 2}
   },
-  "total_entries": 5
+  "total_entries": 14
 }

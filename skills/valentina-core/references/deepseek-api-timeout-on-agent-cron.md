@@ -63,7 +63,13 @@ import json,sys;d=json.load(sys.stdin)
 "
 ```
 
-### Primary Fix: Convert to No_Agent Script
+### ⚠️ Critical Nuance: Normal vs Pathological (Updated 2026-06-25)
+
+Reference files document the *persistent* failure case (all 3 retries fail). However, the more common pattern is **intermittent** — jobs show Broken pipe warnings in the journal but succeed on retry 2 or 3. This was confirmed on 2026-06-25: 4 Broken pipe events across the gateway, **zero actual job failures**; all 32 cron jobs show "ok" status.
+
+**Use the conversion pattern below ONLY when a job literally fails** (shows "error" in `hermes cron list`). Do NOT pre-emptively convert jobs that are succeeding via retries — the retry mechanism is working as designed.
+
+## Primary Fix: Convert to No_Agent Script
 
 The cleanest fix is to convert the failing agent-driven job to a **`no_agent: true` script-based job**:
 

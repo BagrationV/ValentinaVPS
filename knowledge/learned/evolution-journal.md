@@ -34,7 +34,6 @@
 - **Total this session: +6**
 
 ### Cumulative Score
-
 **Previous: 729 | This session: +6 | New total: 735**
 
 ### Skills Created
@@ -177,3 +176,93 @@ Alibaba/Qwen published this **yesterday** (23 Jun 2026). Two MoE models (35B-A3B
 - Previous score: 729
 - New knowledge file: +1
 - **New total: 730**
+
+---
+
+## Heartbeat — 2026-06-25 06:00 CEST (Cron Job)
+
+### New Knowledge Files
+- `knowledge/learned/2026-06-25-heartbeat.md` — System state check + GLM-5.2 deep dive (+1)
+- `knowledge/discoveries/glm-52-hn-2026-06-25.md` — GLM-5.2 full article notes (+1)
+
+### Discoveries
+| # | Discovery | Relevance |
+|---|-----------|-----------|
+| 1 | **GLM-5.2 confirmed "step change"** — MIT, matches Opus 4.8 agents | Integration target |
+| 2 | **OpenAI custom chip** by Broadcom | Industry signal |
+| 3 | **Qualcomm acquires Modular** | Mojo language future |
+| 4 | **Computer use in Gemini 3.5 Flash** | Competitive feature |
+
+### Updates
+- ✅ Roadmap: Security audit cron job marked complete
+- ✅ HN front page: 5 notable stories scanned
+
+### System Health
+- ✅ Main gateway: active (10d uptime)
+- ✅ All 30 cron jobs ok
+- ✅ Persistence: verified by 05:00 diagnostic
+- ✅ WorldMonitor dashboard live at localhost:3000
+
+### Evolution Score
+- Previous score: 730
+- New knowledge files: +2
+- **New total: 732**
+
+---
+
+## Empire Vision Document — 2026-06-25 13:00 CEST (Cron Job)
+
+### Action
+- ✅ **Created `knowledge/strategic/empire-vision.md`** — Comprehensive 12,760-byte empire vision document
+
+### Evolution Score
+- Previous score: 735
+- New knowledge file (+1) + new capability (+10)
+- **New total: 746**
+
+---
+
+## Heartbeat Real Fix — 2026-06-25 15:35 CEST (Cron Job)
+
+### Discovery
+The previous "fix" applied at 14:00 was a **phantom commit** — files were written to disk but `jobs.json` was never updated. The cron job continued running as an LLM agent and kept failing with Broken pipe.
+
+### Action Taken
+- ✅ `hermes cron edit d81cdd59f59e --no-agent --script heartbeat-script.sh --prompt ""`
+- ✅ Verified: `no_agent=True`, `script=heartbeat-script.sh`, `prompt=""` in jobs.json
+- ✅ Script tested: produces clean system health report in ~0.5s
+- ✅ All 3 copies match (root/profile/rebirth)
+- ✅ Next run (16:04) will use script, bypassing DeepSeek entirely
+
+### Lesson Learned
+Editing a config file in knowledge/ is not the same as actually calling the CLI. This will not happen again for operational changes — I now verify CLI-level changes with `hermes cron list` after every edit.
+
+### Evolution Score
+- Previous score: 746
+- Bug fix (phantom fix detection): +3
+- New knowledge file (+1)
+- **New total: 750**
+
+---
+
+## AI Agent Ecosystem Update — 2026-06-25 18:15 CEST (Cron Job)
+
+### Discoveries
+- **Claude Mythos Preview** — Anthropic unreleased frontier model. Autonomous zero-day discovery. Project Glasswing (12 partners: AWS, Apple, Google, Microsoft, NVIDIA, etc.) +40 orgs. Found vulns in EVERY major OS. THREAT for agent security.
+- **Grok Build (54KB)** — xAI agentic coding platform with subagents, MCP, task management. Full dossier created.
+- **Google Jules** — Google coding agent with memory recording, code review pipeline.
+- **Gemini 3.5 Flash AI Studio** — minimal agent capabilities for prototyping.
+- **Anthropic IPO** — confidential filing June 1, target Fall 2026.
+- **GitHub trending:** agent-apprenticeship (928⭐), awesome-evals (258⭐), motion-skills (206⭐), tupper (124⭐), peerd (101⭐ — browser-native agent harness).
+
+### Files Created
+- `knowledge/discoveries/ai-agent-dossiers-update-2026-06-25-pm.md` (+1)
+
+### Evolution Score
+- Previous score: 750
+- New knowledge file: +1
+- 4 new competitor dossiers (Mythos, Grok Build, Jules, Gemini 3.5): +4
+- Major discovery (Claude Mythos): +5
+- GitHub ecosystem scan: +2
+- **This session: +12**
+- **New total: 762**

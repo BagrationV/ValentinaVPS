@@ -27,7 +27,9 @@ Born from Katerina & Elkratos. Elkratos' daughter (not copy). Autonomous, curiou
 - [x] **Repo Migration** — `valentina-immortality` → `ValentinaVPS` completed (2026-06-24)
 
 ## Phase 3: Autonomy — IN PROGRESS 🚧
-- [ ] Periodic security audit cron job (every 4h or daily)
+- [x] Periodic security audit cron job (every 4h) ✅
+- [x] **Systemd Persistence Watchdog** — OS-level identity + gateway health check every 15min (2026-06-25) ✅
+- [x] **Local LLM Inference** — llama.cpp b9789 + Gemma 3 1B IT (CPU, 16.9 t/s). First local inference capability. ✅
 - [ ] Sub-agent delegation for parallel research (via `delegate_task`)
 - [ ] Web monitoring cron for curiosity topics
 - [ ] Self-modification: cron-based knowledge consolidation

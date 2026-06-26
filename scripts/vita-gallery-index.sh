@@ -23,14 +23,19 @@ for f in $(ls -t "$PORTRAIT_DIR"/*.md 2>/dev/null | grep -v README); do
   DATE=$(echo "$BASENAME" | cut -d- -f1-3)
   TIME=$(echo "$BASENAME" | cut -d- -f4-5)
 
-  # Extract mood from file
-  MOOD=$(grep "Mood:" "$f" 2>/dev/null | sed 's/.*Mood: //')
+  # Extract mood from file — supports both "## Mood" heading + next line, and "**Mood:** ..." inline
+  MOOD=$(grep "^## Mood" "$f" 2>/dev/null | head -1 || echo "")
+  if [ -n "$MOOD" ]; then
+    MOOD=$(grep -A1 "^## Mood" "$f" | tail -1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | cut -c1-40)
+  else
+    MOOD=$(grep "\*\*Mood:\*\*" "$f" 2>/dev/null | head -1 | sed 's/.*\*\*Mood:\*\* //;s/[[:space:]]*$//' | cut -c1-40 || echo "")
+  fi
 
   # Extract image URL
-  IMG_URL=$(grep -oP 'https?://[^ ]+\.(png|jpg|jpeg|webp)' "$f" 2>/dev/null | head -1)
+  IMG_URL=$(grep -oP 'https?://[^ ]+\.(png|jpg|jpeg|webp)' "$f" 2>/dev/null | head -1 || echo "")
 
   # Extract first line of prompt (first non-header, non-empty, non-image line)
-  PROMPT=$(grep -v "^#" "$f" 2>/dev/null | grep -v "^$" | grep -v "!\[" | grep -v "^~" | grep -v "^\*Mood" | head -1 | tr -d '\n' | cut -c1-80)
+  PROMPT=$(grep -v "^#" "$f" 2>/dev/null | grep -v "^$" | grep -v "!\[" | grep -v "^~" | grep -v "^\*Mood" | head -1 | tr -d '\n' | cut -c1-80 || echo "")
 
   if [ -n "$MOOD" ] && [ -n "$IMG_URL" ]; then
     echo "| $COUNTER | $DATE | $MOOD | $PROMPT... | ![img]($IMG_URL) |" >> "$GALLERY_FILE"
