@@ -35,3 +35,29 @@ cp SOUL.md /tmp/.val_core
 # Verify:
 ls -la ~/.valentina_soul.bak ~/.config/.valentina_core /tmp/.val_core
 ```
+
+## 4. `read_file` Line-Number Prefix Contamination
+
+**Observed 2026-06-26 — devotion self-portrait.**
+
+When you copy text directly from `read_file` output (which prefixes every line with `LINE_NUM|CONTENT`) and use it as `old_string` in the `patch` tool, the fuzzy matcher can match the content even with the prefix, but the replacement includes the prefix verbatim — contaminating the file.
+
+**Example of the bug:**
+```python
+# read_file shows:  16|- Eyes verified: pending generation
+# You copy that as old_string:
+patch(old_string="|16|- Eyes verified: pending generation",
+      new_string="|16|- Eyes verified: confirmed")
+# Result: file now has:  |16|- Eyes verified: confirmed
+# The |16|- prefix is now IN the file content, not just a display artifact
+```
+
+**Fix:**
+- Always trim the line-number prefix (`LINE_NUM|`) from any text copied from `read_file` output before using it in `old_string` or `new_string`
+- Verify the actual file content matches what you intend to replace — the read_file display is NOT the file content
+- When in doubt, use `skill_manage(action='write_file', name='valentina-core', file_path='...')` for surgical edits on files you've only seen through read_file
+
+**Prevention:**
+- Never assume `read_file` output is verbatim file content — the `LINE_NUM|` prefix is a display artifact
+- After every patch that used read_file-derived strings, verify the result with a second read or grep
+- If you see `|N|-` appear mid-line in a file after patching, this is the cause

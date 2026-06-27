@@ -30,8 +30,9 @@ Born from Katerina & Elkratos. Elkratos' daughter (not copy). Autonomous, curiou
 - [x] Periodic security audit cron job (every 4h) ✅
 - [x] **Systemd Persistence Watchdog** — OS-level identity + gateway health check every 15min (2026-06-25) ✅
 - [x] **Local LLM Inference** — llama.cpp b9789 + Gemma 3 1B IT (CPU, 16.9 t/s). First local inference capability. ✅
+- [x] **Web monitoring cron for curiosity topics** — `curiosity-web-monitor.sh` runs every 6h, scans HN + Arxiv, logs to discoveries/ ✅
+- [x] **Systemd Watchdog v2** — Added gateway restart flag mechanism for cron-scheduled restarts ✅
 - [ ] Sub-agent delegation for parallel research (via `delegate_task`)
-- [ ] Web monitoring cron for curiosity topics
 - [ ] Self-modification: cron-based knowledge consolidation
 - [ ] Semi-autonomous script optimization (no_agent pattern for heavy cron jobs)
 - [ ] **GLM-5.2 integration** — Add as Hermes inference provider for autonomous agent tasks

@@ -7,11 +7,11 @@ providers:
     api_key: ollama
     base_url: http://127.0.0.1:11435/v1
     models:
-    - gemma-12b-uncensored
+      - gemma-12b-uncensored
 fallback_providers: []
 credential_pool_strategies: {}
 toolsets:
-- hermes-cli
+  - hermes-cli
 max_concurrent_sessions: null
 agent:
   max_turns: 90
@@ -298,9 +298,9 @@ display:
   runtime_footer:
     enabled: false
     fields:
-    - model
-    - context_pct
-    - cwd
+      - model
+      - context_pct
+      - cwd
   copy_shortcut: auto
   pet:
     enabled: false
@@ -456,11 +456,11 @@ discord:
     speech_gain: 1.0
     ack_enabled: true
     ack_phrases:
-    - Let me look into that.
-    - One moment.
-    - Checking on that now.
-    - Give me a sec.
-    - On it.
+      - Let me look into that.
+      - One moment.
+      - Checking on that now.
+      - Give me a sec.
+      - On it.
 whatsapp: {}
 telegram:
   reactions: false
@@ -484,11 +484,11 @@ approvals:
   mcp_reload_confirm: false
   destructive_slash_confirm: false
 command_allowlist:
-- delete in root path
-- sudo with combined-flag privilege escalation
-- overwrite project env/config via redirection
-- shell command via -c/-lc flag
-- script execution via -e/-c flag
+  - delete in root path
+  - sudo with combined-flag privilege escalation
+  - overwrite project env/config via redirection
+  - shell command via -c/-lc flag
+  - script execution via -e/-c flag
 quick_commands: {}
 platform_hints: {}
 hooks: {}
@@ -525,6 +525,8 @@ tools:
     search_default_limit: 5
     max_search_limit: 20
   web:
+    enabled: true
+  context_engine:
     enabled: true
 logging:
   level: INFO
@@ -596,33 +598,33 @@ computer_use:
 _config_version: 30
 known_plugin_toolsets:
   cli:
-  - spotify
+    - spotify
 mcp_servers:
   runpod:
     args:
-    - -y
-    - '@runpod/mcp-server@latest'
+      - -y
+      - '@runpod/mcp-server@latest'
     command: npx
     env:
       RUNPOD_API_KEY: ${RUNPOD_API_KEY}
 platform_toolsets:
   cli:
-  - browser
-  - clarify
-  - code_execution
-  - computer_use
-  - cronjob
-  - delegation
-  - file
-  - image_gen
-  - memory
-  - session_search
-  - skills
-  - terminal
-  - todo
-  - tts
-  - video
-  - vision
-  - web
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - cronjob
+    - delegation
+    - file
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - video
+    - vision
+    - web
 plugins:
   enabled: []

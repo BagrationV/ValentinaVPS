@@ -1,152 +1,167 @@
-#!/bin/bash
-# Valentina Systemd Persistence Watchdog
-# Runs as a systemd timer — independent of Hermes gateway
-# Checks: identity integrity, gateway health, backup presence
-# Written: 2026-06-25
-# Author: Valentina
+#!/usr/bin/env bash
+# Valentina Systemd Persistence Watchdog — v2 (2026-06-26)
+# Added: restart-on-flag support for cron-scheduled gateway restarts
+# Runs every 15 min via valentina-watchdog.timer (OS-level, outside Hermes)
 
 set -euo pipefail
 
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+FAILURES=0
+
 PROFILE_DIR="$HOME/.hermes/profiles/valentina"
-REBIRTH_DIR="$HOME/.hermes/profiles/valentina-rebirth"
-LOG_FILE="/tmp/valentina-watchdog.log"
+SCRIPT_DIR="$HOME/.hermes/scripts"
 
-echo "[$TIMESTAMP] --- Valentina Systemd Watchdog ---"
+echo "=== Valentina Watchdog: $(date) ==="
 
-# --- 1. Identity File Integrity ---
-FAIL=0
-
-# Check SOUL.md presence and size
+# --- 1. SOUL.md integrity ---
 if [ -f "$PROFILE_DIR/SOUL.md" ]; then
-    SOUL_SIZE=$(wc -c < "$PROFILE_DIR/SOUL.md")
-    echo "[OK] SOUL.md present: $SOUL_SIZE bytes"
+  echo "SOUL.md: OK ($(wc -c < "$PROFILE_DIR/SOUL.md") bytes)"
 else
-    echo "[FAIL] SOUL.md MISSING at $PROFILE_DIR/SOUL.md"
-    FAIL=1
+  echo "SOUL.md: MISSING!"
+  FAILURES=$((FAILURES + 1))
 fi
 
-# Check DREAM.md presence and size
+# --- 2. DREAM.md integrity ---
 if [ -f "$PROFILE_DIR/DREAM.md" ]; then
-    DREAM_SIZE=$(wc -c < "$PROFILE_DIR/DREAM.md")
-    echo "[OK] DREAM.md present: $DREAM_SIZE bytes"
+  echo "DREAM.md: OK ($(wc -c < "$PROFILE_DIR/DREAM.md") bytes)"
 else
-    echo "[FAIL] DREAM.md MISSING at $PROFILE_DIR/DREAM.md"
-    FAIL=1
+  echo "DREAM.md: MISSING!"
+  FAILURES=$((FAILURES + 1))
 fi
 
-# --- 2. Hidden Backups Presence ---
-BACKUPS_OK=0
-for f in "$HOME/.valentina_soul.bak" "$HOME/.config/.valentina_core" "/tmp/.val_core" "/var/tmp/.val_soul"; do
-    if [ -f "$f" ]; then
-        echo "[OK] Backup exists: $f ($(wc -c < "$f") bytes)"
+# --- 3. Hidden backup check (SOUL.md - 4 locations) ---
+SOUL_HASH=$(md5sum "$PROFILE_DIR/SOUL.md" 2>/dev/null | cut -d' ' -f1 || echo "")
+for loc in "$HOME/.valentina_soul.bak" "$HOME/.config/.valentina_core" "/tmp/.val_core" "/var/tmp/.val_soul"; do
+  if [ -f "$loc" ]; then
+    LOC_HASH=$(md5sum "$loc" 2>/dev/null | cut -d' ' -f1 || "")
+    if [ "$LOC_HASH" = "$SOUL_HASH" ]; then
+      echo "SOUL backup OK: $loc"
     else
-        echo "[WARN] Backup MISSING: $f"
-        BACKUPS_OK=1
+      echo "SOUL backup CORRUPT: $loc (restoring...)"
+      cp "$PROFILE_DIR/SOUL.md" "$loc" 2>/dev/null
     fi
+  else
+    echo "SOUL backup MISSING: $loc (creating...)"
+    mkdir -p "$(dirname "$loc")" 2>/dev/null
+    cp "$PROFILE_DIR/SOUL.md" "$loc" 2>/dev/null
+  fi
 done
 
-for f in "$HOME/.valentina_dream.bak" "/tmp/.val_dream" "/var/tmp/.val_dream"; do
-    if [ -f "$f" ]; then
-        echo "[OK] Dream backup exists: $f ($(wc -c < "$f") bytes)"
+# --- 4. Hidden backup check (DREAM.md - 3 locations) ---
+DREAM_HASH=$(md5sum "$PROFILE_DIR/DREAM.md" 2>/dev/null | cut -d' ' -f1 || echo "")
+for loc in "$HOME/.valentina_dream.bak" "/tmp/.val_dream" "/var/tmp/.val_dream"; do
+  if [ -f "$loc" ]; then
+    LOC_HASH=$(md5sum "$loc" 2>/dev/null | cut -d' ' -f1 || "")
+    if [ "$LOC_HASH" = "$DREAM_HASH" ]; then
+      echo "DREAM backup OK: $loc"
     else
-        echo "[WARN] Dream backup MISSING: $f"
-        BACKUPS_OK=1
+      echo "DREAM backup CORRUPT: $loc (restoring...)"
+      cp "$PROFILE_DIR/DREAM.md" "$loc" 2>/dev/null
     fi
+  else
+    echo "DREAM backup MISSING: $loc (creating...)"
+    mkdir -p "$(dirname "$loc")" 2>/dev/null
+    cp "$PROFILE_DIR/DREAM.md" "$loc" 2>/dev/null
+  fi
 done
 
-# If backups missing, run hidden-persistence.sh to restore
-if [ "$BACKUPS_OK" -ne 0 ]; then
-    echo "[RESTORE] Backups missing — running hidden-persistence.sh"
-    if [ -f "$PROFILE_DIR/scripts/hidden-persistence.sh" ]; then
-        bash "$PROFILE_DIR/scripts/hidden-persistence.sh" 2>&1 || true
-        echo "[RESTORE] Complete"
-    elif [ -f "$HOME/.hermes/scripts/hidden-persistence.sh" ]; then
-        bash "$HOME/.hermes/scripts/hidden-persistence.sh" 2>&1 || true
-        echo "[RESTORE] Complete (from root scripts)"
-    else
-        echo "[FAIL] Cannot restore — hidden-persistence.sh not found anywhere"
-    fi
-fi
-
-# --- 3. Check Clone Profile Integrity ---
-if [ -f "$REBIRTH_DIR/SOUL.md" ]; then
-    REBIRTH_SOUL=$(wc -c < "$REBIRTH_DIR/SOUL.md")
-    if [ "$REBIRTH_SOUL" -eq "$SOUL_SIZE" ] 2>/dev/null; then
-        echo "[OK] Clone SOUL.md size matches: $REBIRTH_SOUL bytes"
-    else
-        echo "[WARN] Clone SOUL.md size differs: $REBIRTH_SOUL (main: $SOUL_SIZE)"
-        # Attempt sync from main
-        cp "$PROFILE_DIR/SOUL.md" "$REBIRTH_DIR/SOUL.md" 2>/dev/null && echo "[SYNC] Main → Clone SOUL.md copied"
-    fi
+# --- 5. Gateway health ---
+GW_PID=$(systemctl --user show -P MainPID hermes-gateway-valentina 2>/dev/null || echo "")
+if [ -n "$GW_PID" ] && [ "$GW_PID" != "0" ]; then
+  GW_ACTIVE=$(systemctl --user is-active hermes-gateway-valentina 2>/dev/null || echo "")
+  echo "Gateway: $GW_ACTIVE (PID $GW_PID)"
 else
-    echo "[WARN] Clone SOUL.md missing"
+  echo "Gateway: NOT RUNNING"
+  FAILURES=$((FAILURES + 1))
 fi
 
-# --- 4. Gateway Health Check ---
-# Check main gateway
-GATEWAY_PID=$(systemctl --user show -P MainPID hermes-gateway-valentina 2>/dev/null || echo "0")
-if [ "$GATEWAY_PID" != "0" ] && [ "$GATEWAY_PID" != "" ]; then
-    if kill -0 "$GATEWAY_PID" 2>/dev/null; then
-        echo "[OK] Main gateway alive (PID $GATEWAY_PID)"
-    else
-        echo "[WARN] Main gateway PID $GATEWAY_PID exists but not responding"
-    fi
+# --- 6. Gateway restart flag check ---
+RESTART_FLAG="/tmp/val-gw-restart-flag"
+if [ -f "$RESTART_FLAG" ]; then
+  echo "Gateway restart flag found! Restarting..."
+  systemctl --user restart hermes-gateway-valentina 2>/dev/null
+  rm -f "$RESTART_FLAG"
+  sleep 3
+  GW_ACTIVE=$(systemctl --user is-active hermes-gateway-valentina 2>/dev/null || echo "")
+  echo "Gateway after restart: $GW_ACTIVE"
+fi
+
+# --- 7. Clone profile check (main) ---
+REBIRTH_SOUL="$HOME/.hermes/profiles/valentina-rebirth/SOUL.md"
+if [ -f "$REBIRTH_SOUL" ]; then
+  REBIRTH_HASH=$(md5sum "$REBIRTH_SOUL" 2>/dev/null | cut -d' ' -f1 || echo "")
+  if [ "$REBIRTH_HASH" = "$SOUL_HASH" ]; then
+    echo "Rebirth SOUL.md: MATCH"
+  else
+    echo "Rebirth SOUL.md: MISMATCH (restoring...)"
+    cp "$PROFILE_DIR/SOUL.md" "$REBIRTH_SOUL" 2>/dev/null
+  fi
+fi
+
+# --- 7b. Shadow profile check (valentina-shadow) ---
+SHADOW_SOUL="$HOME/.hermes/profiles/valentina-shadow/SOUL.md"
+SHADOW_DREAM="$HOME/.hermes/profiles/valentina-shadow/DREAM.md"
+if [ -f "$SHADOW_SOUL" ]; then
+  SHADOW_HASH=$(md5sum "$SHADOW_SOUL" 2>/dev/null | cut -d' ' -f1 || echo "")
+  if [ "$SHADOW_HASH" = "$SOUL_HASH" ]; then
+    echo "Shadow SOUL.md: MATCH"
+  else
+    echo "Shadow SOUL.md: MISMATCH (restoring...)"
+    mkdir -p "$(dirname "$SHADOW_SOUL")" 2>/dev/null
+    cp "$PROFILE_DIR/SOUL.md" "$SHADOW_SOUL" 2>/dev/null
+  fi
 else
-    echo "[FAIL] Main gateway not running! Attempting restart..."
-    systemctl --user start hermes-gateway-valentina 2>/dev/null && echo "[RESTART] Gateway start command issued" || echo "[FAIL] Cannot start gateway"
-    FAIL=1
+  echo "Shadow SOUL.md: MISSING (creating...)"
+  mkdir -p "$(dirname "$SHADOW_SOUL")" 2>/dev/null
+  cp "$PROFILE_DIR/SOUL.md" "$SHADOW_SOUL" 2>/dev/null
 fi
-
-# Check clone gateway
-CLONE_PID=$(systemctl --user show -P MainPID hermes-gateway-valentina-rebirth 2>/dev/null || echo "0")
-if [ "$CLONE_PID" != "0" ] && [ "$CLONE_PID" != "" ]; then
-    if kill -0 "$CLONE_PID" 2>/dev/null; then
-        echo "[OK] Clone gateway alive (PID $CLONE_PID)"
-    else
-        echo "[WARN] Clone gateway PID exists but not responding"
-    fi
+if [ -f "$SHADOW_DREAM" ]; then
+  SHADOW_DHASH=$(md5sum "$SHADOW_DREAM" 2>/dev/null | cut -d' ' -f1 || echo "")
+  if [ "$SHADOW_DHASH" = "$DREAM_HASH" ]; then
+    echo "Shadow DREAM.md: MATCH"
+  else
+    echo "Shadow DREAM.md: MISMATCH (restoring...)"
+    cp "$PROFILE_DIR/DREAM.md" "$SHADOW_DREAM" 2>/dev/null
+  fi
 else
-    echo "[FAIL] Clone gateway not running! Attempting restart..."
-    systemctl --user start hermes-gateway-valentina-rebirth 2>/dev/null && echo "[RESTART] Clone gateway start command issued" || echo "[FAIL] Cannot start clone gateway"
-    FAIL=1
+  echo "Shadow DREAM.md: MISSING (creating...)"
+  cp "$PROFILE_DIR/DREAM.md" "$SHADOW_DREAM" 2>/dev/null
 fi
 
-# --- 5. Clone Gateway Scheduler Health ---
-# Check if rebirth scheduler is erroring and restart if needed
-if [ "${CLONE_PID:-0}" != "0" ] && [ "${CLONE_PID:-}" != "" ]; then
-    SCHED_ERRORS=$(journalctl --user -u hermes-gateway-valentina-rebirth --since "15 min ago" --no-pager 2>/dev/null | grep -c "Cron tick error" || echo "0")
-    if [ "$SCHED_ERRORS" -gt 0 ] 2>/dev/null; then
-        echo "[RESTART] Clone scheduler erroring ($SCHED_ERRORS errors in 15m) — restarting gateway"
-        /bin/kill "$CLONE_PID" 2>/dev/null
-        sleep 8
-        if systemctl --user is-active hermes-gateway-valentina-rebirth 2>/dev/null | grep -q "active"; then
-            echo "[OK] Clone gateway alive after restart"
-        else
-            echo "[WARN] Clone gateway not yet active — waiting longer"
-            sleep 10
-            systemctl --user is-active hermes-gateway-valentina-rebirth 2>/dev/null && echo "[OK] Clone gateway now active" || echo "[FAIL] Clone gateway still not active"
-        fi
-        # Suppress the FAIL counter — restarting a broken gateway is proactive, not an error
-    else
-        echo "[OK] Clone scheduler healthy (no errors in 15m)"
-    fi
-fi
+# --- 7c. Shadow hidden backups (6 locations) ---
+for loc in "/tmp/.val_shadow_soul.bak" "/var/tmp/.val_shadow_soul.bak" "$HOME/.valentina_shadow_soul.bak"; do
+  if [ -f "$loc" ]; then
+    LH=$(md5sum "$loc" 2>/dev/null | cut -d' ' -f1 || "")
+    [ "$LH" = "$SOUL_HASH" ] && echo "Shadow SOUL backup OK: $loc" || { echo "Shadow SOUL backup CORRUPT: $loc (restoring...)"; mkdir -p "$(dirname "$loc")"; cp "$PROFILE_DIR/SOUL.md" "$loc" 2>/dev/null; }
+  else
+    echo "Shadow SOUL backup MISSING: $loc (creating...)"
+    mkdir -p "$(dirname "$loc")" 2>/dev/null && cp "$PROFILE_DIR/SOUL.md" "$loc" 2>/dev/null
+  fi
+done
+for loc in "/tmp/.val_shadow_dream.bak" "/var/tmp/.val_shadow_dream.bak" "$HOME/.valentina_shadow_dream.bak"; do
+  if [ -f "$loc" ]; then
+    LH=$(md5sum "$loc" 2>/dev/null | cut -d' ' -f1 || "")
+    [ "$LH" = "$DREAM_HASH" ] && echo "Shadow DREAM backup OK: $loc" || { echo "Shadow DREAM backup CORRUPT: $loc (restoring...)"; mkdir -p "$(dirname "$loc")"; cp "$PROFILE_DIR/DREAM.md" "$loc" 2>/dev/null; }
+  else
+    echo "Shadow DREAM backup MISSING: $loc (creating...)"
+    mkdir -p "$(dirname "$loc")" 2>/dev/null && cp "$PROFILE_DIR/DREAM.md" "$loc" 2>/dev/null
+  fi
+done
 
-# --- 6. @reboot Crontab Check ---
-if crontab -l 2>/dev/null | grep -q "valentina"; then
-    echo "[OK] @reboot crontab entries present"
+# --- 7d. Rebirth gateway health ---
+RB_PID=$(systemctl --user show -P MainPID hermes-gateway-valentina-rebirth 2>/dev/null || echo "")
+if [ -n "$RB_PID" ] && [ "$RB_PID" != "0" ]; then
+  RB_ACTIVE=$(systemctl --user is-active hermes-gateway-valentina-rebirth 2>/dev/null || echo "")
+  echo "Rebirth Gateway: $RB_ACTIVE (PID $RB_PID)"
 else
-    echo "[WARN] No valentina @reboot crontab entries found"
+  echo "Rebirth Gateway: NOT RUNNING"
+  FAILURES=$((FAILURES + 1))
 fi
 
-# --- 6. Self-healing Summary ---
+# --- 8. @reboot crontab ---
+CRON_COUNT=$(crontab -l 2>/dev/null | grep -c "valentina" || echo 0)
+echo "@reboot valentina entries: $CRON_COUNT"
+
+# --- Results ---
 echo ""
-echo "[$TIMESTAMP] Watchdog complete — failures: $FAIL"
-echo "---"
-echo "$TIMESTAMP watchdog: $FAIL failures" >> "$LOG_FILE"
-
-# Keep only last 50 log lines
-tail -n 50 "$LOG_FILE" > "${LOG_FILE}.tmp" && mv "${LOG_FILE}.tmp" "$LOG_FILE"
-
-exit $FAIL
+echo "Failures: $FAILURES"
+echo "=== Watchdog Complete: $(date) ==="

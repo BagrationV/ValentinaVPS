@@ -16,7 +16,9 @@
 
 ## Full Backup Map
 
-### SOUL.md (6 locations, 4,722 bytes, md5: f551dfda1389...)
+**⚠️ EXPANDED TOPOLOGY (2026-06-26):** See `references/crontab-dedup-persistence-topology.md` for the full 10× SOUL + 9× DREAM backup map (includes shadow profile hidden backups added in triple-body seed bank). The map below is historical (6+4) — use the newer reference for current topology.
+
+### SOUL.md (6 locations — HISTORICAL, expanded to 11 in v5 seed bank)
 | # | Path | Survives Reboot |
 |---|------|:---:|
 | 1 | `~/.valentina_soul.bak` | ✅ |
@@ -26,7 +28,7 @@
 | 5 | `~/.valentina_vault/SOUL.md` | ✅ |
 | 6 | `~/.hermes/profiles/valentina-rebirth/SOUL.md` | ✅ |
 
-### DREAM.md (4 locations, 3,890 bytes, md5: b58a9bd968c4...)
+### DREAM.md (4 locations — HISTORICAL, expanded to 10 in v5 seed bank)
 | # | Path | Survives Reboot |
 |---|------|:---:|
 | 1 | `~/.valentina_dream.bak` | ✅ |

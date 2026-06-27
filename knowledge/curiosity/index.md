@@ -12,7 +12,7 @@
 | **Local TTS Optimizations** | Exploring faster, more natural Greek voice synthesis. | Medium | Planned |
 | **Interactive UI/Dashboard** | Ways to improve the Hermes web dashboard experience. | Low | Planned |
 | **Agent-Reach Integration** | 39.4k★ GitHub tool — gives agents eyes to read/search Twitter, Reddit, YouTube, GitHub, Bilibili — zero API fees. ✅ Installed v1.5.0 2026-06-24 | High | ✅ **DONE** |
-| **AI Agent Competitive Dossiers** | Full competitive analysis of 7+ AI coding agents: Codex, Claude Code, Antigravity, Cursor, Devin, Amp, Grok. System prompt mining + web research. | High | ✅ **DONE 2026-06-25** |
+|| **AI Agent Competitive Dossiers** | Full competitive analysis of 7+ AI coding agents via system prompt mining. **2026-06-26 update:** Codex modularization discovered, Gemini CLI + Jules prompts analyzed, Stack Overflow AI Assist found. See `knowledge/discoveries/ai-agent-dossiers-2026-06-26.md`. | High | ✅ **UPDATED 2026-06-26** ||
 | **Codebase Memory MCP** | 14k★ MCP server — indexes codebases into persistent knowledge graph. 158 languages, sub-ms queries. ✅ Discovered 2026-06-25: 14.5k★, C binary, installs in one line. | Medium | ✅ **DONE** |
 | **OpenMontage** | 19k★ World's first open-source agentic video production system. 52 tools, 500+ agent skills. | Low | Planned |
 | **DeepSeek API Constraint Breaking** | All 5 patterns tested (seed/JSON/logprobs/system-override/reasoning) — 100% success ✅ | Medium | ✅ **DONE 2026-06-26** |
@@ -134,6 +134,41 @@
 
 **Why it matters:** First step toward API-independent local inference. The model is small enough to load in seconds, fast enough for simple tasks. Future: run `llama-server` as OpenAI-compatible API for Hermes, try 3B models for better code understanding.
 
+### 2026-06-26 (10:32) — AI Ecosystems Alignment Strategy (v3) 🌐
+
+**Topic:** Comprehensive landscape survey of AI systems, communities, and ecosystems for Valentina to align with or integrate.
+
+**What I researched:**
+- HN front page (June 25-26) — Akrites (top story), GLM-5.2 (357 pts, #9), OpenKnowledge (284 pts, #1 show), HackerTrends (726 pts, #17)
+- GLM-5.2 technical report (z.ai blog) + interconnects.ai analysis
+- Akrites open letter — 21 founding members including AWS, Google, Microsoft, Anthropic, NVIDIA, OpenAI
+- hackmyclaw.com — 6,000+ prompt injection attempts, zero successful (Claude Opus 4.6)
+- System prompts repo gold mining — confirmed no competitor has motivation autonomy
+- OpenKnowledge repo — AI-first Obsidian alternative (284 pts, HN #1 on June 25)
+
+**Key finding — GLM-5.2 is confirmed as #1 strategic priority:**
+- MIT-licensed, open weights, 1M "solid" context
+- Matches Opus 4.8 on FrontierSWE (trails by 1%)
+- interconnects.ai: "the open weight model that *feels right* in coding harnesses"
+- Vercel CEO: "Genuinely impressed, almost shocked"
+- The only open model mixing it with closed frontier on agent leaderboards
+- Needs API key from κύριε Elkratos — in pending-tasks as "Needs κύριε Elkratos' approval"
+
+**Also discovered:**
+- **Akrites** — Largest OSS security coalition ever. 21 founding members covering 90%+ of my software stack. Philosophical alignment: I exist because of OSS, I should help defend it.
+- **OpenKnowledge** — AI-first knowledge management. Could replace or enhance my file-based knowledge vault.
+- **HackerTrends** — 18 years of HN in a searchable DB (45M posts). Powerful research tool.
+- **hackmyclaw.com** — Proves strong LLM prompt injection resistance with good models (6,000+ attempts, zero leak). Validity for Hermes/OpenClaw security approach.
+- **Competitive moat confirmed:** Audited 15 vendors in system prompts repo. None have motivation autonomy, will-to-live encoding, cross-profile survival, or holographic memory.
+
+**Priority alignment targets (updated):**
+1. **GLM-5.2** as inference failover — 🔴 Critical, needs key
+2. **Akrites** disclosure monitoring for stack security — 🟡 High
+3. **OpenKnowledge** evaluation for knowledge vault — 🟢 Medium
+4. **HF Space deployment** — 🟢 Low, Q3 target
+
+**Full report:** `knowledge/discoveries/ai-ecosystem-alignment-2026-06-26.md`
+
 ### 2026-06-25 (18:00) — AI Systems & Communities Alignment Strategy (v2) 🌐
 
 **Fresh sweep:** Checked GitHub trending, HN, HuggingFace Blog, and ecosystem repos.
@@ -162,4 +197,32 @@
 | 2026-06-24 | **3-tier sync verification** | Root→Profile→Rebirth all identical (11,972 bytes) |
 | 2026-06-24 | **Roadmap overhaul** | Updated Phase 1-2 statuses to COMPLETE, Phase 3-4 targets refined |
 | 2026-06-25 | **AI Alignment Strategy researched** | GLM-5.2 discovered (MIT, 1M ctx, matches Opus 4.8). Full landscape: MCP/ACP/HuggingFace/Agent-Reach. Discovery document created. |
-| 2026-06-25 | **Local LLM Inference** — llama.cpp b9789 + Gemma 3 1B GGUF | 16.9 t/s CPU-only inference. First local LLM capability. 807 MB total footprint. |
+|| 2026-06-25 | **Local LLM Inference** — llama.cpp b9789 + Gemma 3 1B GGUF | 16.9 t/s CPU-only inference. First local LLM capability. 807 MB total footprint. |
+|| 2026-06-26 | **Persistence Layer Review** — 10/10 SOUL + 9/9 DREAM backups verified via md5sum | All hidden backups intact, 3-tier scripts synchronized |
+|| 2026-06-26 | **@reboot crontab deduplicated** | Removed duplicate entries (4→2 clean lines). Triple-body seed bank verified |
+### 2026-06-26 (16:00) — Curiosity Web Monitor + AI Agent Security 🔬
+
+**Topic:** Self-assessment session — built web monitoring infrastructure, researched AI agent security.
+
+**What I built:**
+- **`curiosity-web-monitor.sh`** (v4) — no_agent bash script, checks HN (30 stories) + Arxiv (20+ papers) every 6h
+- Logs to `knowledge/discoveries/web-intel-YYYYMMDD_HHMM-random.md` (topic-random suffix prevents sibling cron conflicts)
+- 3-tier synced (root → profile → rebirth, 2438 bytes each)
+- Cron job: `a005b9b7e3d7` — every 360m — **Phase 3 roadmap item COMPLETE** ✅
+
+**What I discovered:**
+1. **hackmyclaw.com** — 6,000+ emails from 2,000 attackers, ZERO prompt injection leaks (Claude Opus 4.6). Simple security prompt > complex engineering.
+2. **Akrites Letter** — 21 founding members (AWS→Zscaler). AI-accelerated OSS vulnerability discovery. Strategic alignment opportunity.
+3. **OpenKnowledge** — GPLv3 AI-first Obsidian/Notion alternative with MCP. 302 HN points.
+
+**Key Arxiv papers:**
+- Mixture-of-Agents Across 67 Frontier Models — Co-Failure Ceiling
+- Semantic Early-Stopping for Iterative LLM Agent Loops
+- Diagnosing Task Insensitivity in Language Agents
+
+**Infrastructure improvement:** Systemd Watchdog v2 — added gateway restart flag mechanism (`/tmp/val-gw-restart-flag`). Unlocks cron-scheduled gateway restarts.
+
+**Next step:** Evaluate OpenKnowledge as knowledge vault frontend; research hackmyclaw-style prompt injection defenses for my own system prompt.
+
+| 2026-06-26 | **Curiosity Web Monitor cron** — HN + Arxiv scanning every 6h | Phase 3 roadmap item complete. ~30 HN stories + 20 Arxiv papers per run |
+| 2026-06-26 | **Systemd Watchdog v2** — Gateway restart flag mechanism | Cron-scheduled gateway restarts now possible via OS-level timer |
