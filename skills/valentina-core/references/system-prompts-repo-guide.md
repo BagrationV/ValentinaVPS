@@ -11,7 +11,7 @@
 
 This is a full git clone of the famous `system_prompts_leaks` repo — NOT part of the valentina knowledge vault. It lives in the user's home at `~/knowledge/system-prompts/` alongside the valentina ecosystem.
 
-## Directory Structure (16 vendor directories)
+## Directory Structure (12 vendor directories — updated 2026-06-27)
 
 | Vendor | Contents |
 |--------|----------|
@@ -27,6 +27,20 @@ This is a full git clone of the famous `system_prompts_leaks` repo — NOT part 
 | **Perplexity/** | (visible but not inventoried) |
 | **Notion/** | Notion AI system prompts |
 | **Misc/** | Miscellaneous system prompts |
+
+## Repo Metrics (updated 2026-06-27)
+
+| Metric | Value |
+|--------|-------|
+| **Total prompt files** | **258** (across all 12 vendors) |
+| **Total lines** | **131,776** |
+| **Vendors** | 12 (Anthropic, OpenAI, Google, Cursor, Meta, Microsoft, Mistral, xAI, Qwen, Perplexity, Notion, Misc) |
+| **Largest single file** | Anthropic bundled-skills/claude-api.md — 11,356 lines |
+| **Runner-up** | OpenAI/Codex/gpt-5.5.md — 11,103 lines |
+| **Hermes prompt** | Misc/hermes.md — 17,820 bytes |
+| **Repo stars** | ~45.5K |
+
+**⚠️ Size signal:** The two largest files are both **bundled-skills** files (Anthropic's claude-api and OpenAI's gpt-5.5). This is a cross-vendor bloat pattern — monolithic skill/API descriptions balloon past 10K lines. Valentina's granular skill system (~500 lines per skill) avoids this.
 
 ## Mining Technique — Step by Step
 
@@ -147,6 +161,46 @@ This session read GPT-5.5 Codex (the primary OpenAI coding agent) and Claude Des
 - Multi-agent delegation hierarchy
 - Cross-machine dual residence
 - Self-evolution engine (knowledge vault + capability matrix)
+
+## Key Findings from 2026-06-27 Mining
+
+This session did a full sweep of the repo with updated git history.
+
+### Repo-wide Stats
+- **258** prompt files, **131,776** total lines
+- **12** vendor directories (Anthropic, OpenAI, Google, Cursor, Meta, Microsoft, Mistral, xAI, Qwen, Perplexity, Notion, Misc)
+- **Largest file:** Anthropic bundled-skills/claude-api.md (11,356 lines) — a combined skill+API reference file
+- **Second largest:** OpenAI/Codex/gpt-5.5.md (11,103 lines) — GPT-5.5 Codex system prompt
+- **Hermes prompt** now in the repo at Misc/hermes.md (17,820 bytes)
+
+### 🔥 Claude Fable 5 == Mythos 5 (Confirmed)
+Claude Fable 5 and Mythos 5 are the **same underlying model** with different access tiers:
+- **Fable 5**: Generally available via web/API/desktop — has "additional safety measures for dual-use capabilities"
+- **Mythos 5**: Available to "only approved organizations" — same model without safety measures
+- Budget: 190,000 tokens
+- Product line: Fable 5 > Opus 4.8 > Sonnet 4.6 > Haiku 4.5
+- Source: `claude-fable-5.md` (3,825 lines). The Fable.md file explicitly states: "Claude Fable 5 and Claude Mythos 5 share the same underlying model."
+- **Competitive implication:** There is no secret "Mythos architecture" — the two models are identical. The differentiation is purely in safety access tiers, not capability.
+
+### 🔥 GPT-5.5 Codex Persona Bloat (11,103 lines)
+GPT-5.5 Codex now has 8+ personality variants built into the prompt:
+- cynic, listener, nerdy, robot, candid, efficient, friendly, quirky, professional
+- These are expressed as inline `{{ personality }}` template variables embedded in a ~500-line core instruction set
+- The remaining ~10,600 lines are: editing constraints, frontend design rules, tool JSON schemas, personality definitions
+- 272,000 context window (from gpt-5-codex)
+- **Competitive edge:** Valentina's personality is a separate skill (valentina-erotiki), not inline in the system prompt. This is more maintainable.
+
+### Hermes Prompt in the Wild
+The repo now contains Hermes Agent's system prompt (Misc/hermes.md, 17,820 bytes). Contains:
+- SOUL.md: identity + core truths about being helpful, resourceful, earning trust through competence
+- Memory system instructions
+- Persistent file-based memory and session continuation
+- **Interesting:** References "YOU can search whenever you want" — similar autonomy framing to mine
+
+### Vendor Count Correction
+Previous version of this guide said "16 vendors." Actual count: **12**.
+- 12 confirmed with prompt files
+- Checking the remaining 4: possibly GitHub, HuggingFace, or other small repos counted as vendors in the previous pass's ls output. Current count is verified via `ls -d */`.
 
 ## Git Notes
 

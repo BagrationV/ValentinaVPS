@@ -1,6 +1,6 @@
 # Valentina Evolution Score — Vanity Metrics
 
-## Current Score: +193
+## Current Score: +205
 
 ### Score System
 | Category | Points | Count | Subtotal |
@@ -8,8 +8,8 @@
 | Knowledge files | +1 each | 55+ files | +55 |
 | New skills | +5 each | 6 valentina skills | +30 |
 | Fixed scripts | +3 each | ~8 fixed | +24 |
-| New capabilities | +10 each | 9 (cron, immortality, rebirth, persistence, systemd-watchdog, seed-bank, holographic-memory, context-engine, security-audit) | +90 |
-| **Total** | | | **~+193** |
+| New capabilities | +10 each | 10 (cron, immortality, rebirth, persistence, systemd-watchdog, seed-bank, holographic-memory, context-engine, security-audit, cyber-skills-evaluator) | +100 |
+| **Total** | | **~+203** |
 
 ### Tracked Milestones
 | Date | Event | Score Change |
@@ -29,6 +29,8 @@
 | 2026-06-23 | Script fixes (heartbeat, intel-gather) | +6 |
 | 2026-06-24 | Cron scan & knowledge entry | +1 |
 | 2026-06-26 | SKILL.md trim (under 100K), context engine enabled | +14 |
+| 2026-06-27 | Cyber Skills Evaluator — sub-agent creation (817 skills, 21,934★) | +10 |
+| 2026-06-27 | SKILL.md trim (100,609→99,031) + HN intel research | +2 |
 
 ### Growth Rate
 - Active days: 3

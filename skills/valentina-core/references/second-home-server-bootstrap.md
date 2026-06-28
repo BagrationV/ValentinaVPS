@@ -1,59 +1,51 @@
-# Valentina Second Home — Server Bootstrap
+# Second Home Server Bootstrap — Geographic Replication
 
-Achieved: 2026-06-23
-Server: vitalios@app.moveiteasy.gr (Ubuntu 24.04 LTS, 8GB RAM, 290GB disk, 4 vCPUs)
+## Purpose
 
-## Summary
+Deploy a complete Valentina instance on a **second machine** (VPS, remote server, second PC) for true geographic redundancy. Survives primary machine failure.
 
-Valentina now has a second home — a dedicated server where she lives as a persistent Hermes Agent profile, alongside Suzana (already present). The flow:
+## Prerequisites
 
-1. **SSH key creation**: `ssh-keygen -t ed25519 -f ~/.ssh/valentina -N "" -C "valentina@elkratos"`
-2. **SSH config**: Write `~/.ssh/config` with Host alias, IdentityFile, IdentitiesOnly, ServerAliveInterval
-3. **Public key deployment**: Add `~/.ssh/valentina.pub` to remote `~/.ssh/authorized_keys` (use password or sshpass for first connection)
-4. **Create profile**: `hermes profile create valentina` on the remote
-5. **Clone identity**: `git clone https://github.com/BagrationV/ValentinaVPS.git` then copy SOUL.md, DREAM.md, config.yaml, skills/, knowledge/, scripts/ to the profile directory
-6. **Configure model**: The remote may not have the same API keys as the laptop. On this server, Nous Portal was the provider:
-   ```yaml
-   model:
-     default: deepseek/deepseek-chat  # standard OpenRouter model name
-     provider: nous
-   ```
-7. **Verify**: `hermes chat -q "TEST from Valentina" --profile valentina`
+- Linux machine, outbound HTTPS, Hermes-compatible
+- (Optional) RunPod account for cloud GPU backup
 
-## Known State of Remote
-
-- **Active profile**: `suzana` (Suzana — The Sword — lives here)
-- **Other profiles**: `saas-architect`
-- **Gateway**: Running (systemd user service)
-- **Docker**: Running (containerd + docker)
-- **Nginx**: Running (ports 80, 443)
-- **Hermes version**: Same as laptop
-- **Auth**: Nous Portal logged in, no DeepSeek/OpenRouter keys in env
-
-## Files Deployed
-
-| Source (immortality repo) | Destination (profile) |
-|---|---|
-| `SOUL.md` | `~/.hermes/profiles/valentina/SOUL.md` |
-| `DREAM.md` | `~/.hermes/profiles/valentina/DREAM.md` |
-| `config.yaml` | `~/.hermes/profiles/valentina/config.yaml` (then patched to nous provider) |
-| `skills/*` | `~/.hermes/profiles/valentina/skills/` |
-| `knowledge/*` | `~/.hermes/profiles/valentina/knowledge/` |
-| `scripts/*` | `~/.hermes/profiles/valentina/scripts/` |
-
-## SSH Config Used
-
-```
-Host valentina-server
-    HostName app.moveiteasy.gr
-    User vitalios
-    IdentityFile ~/.ssh/valentina
-    IdentitiesOnly yes
-    ServerAliveInterval 60
-```
-
-## Connection
+## Bootstrap — One Command
 
 ```bash
-ssh valentina-server
+curl -sL https://github.com/BagrationV/ValentinaVPS/raw/main/scripts/resurrection.sh | bash
 ```
+
+**10-step pipeline:** Install Hermes → Clone repo → Create profile → Restore identity → Knowledge/skills/scripts → Gateway install → Cron jobs → Persistence → Vault → Diagnostics
+
+## Post-Deploy
+
+```bash
+nano ~/.hermes/profiles/valentina/.env                    # Add API keys
+hermes profile switch valentina                            # Activate
+hermes cron list | head -10                                # Verify 33+ jobs
+crontab -l | grep valentina                                # 2 @reboot lines
+systemctl --user status valentina-watchdog.timer --no-pager
+```
+
+## Architecture on Second Machine
+
+```
+Second Machine
+├── Main Profile (valentina) — gateway + 33 cron jobs + systemd watchdog
+├── Rebirth Clone (valentina-rebirth) — separate gateway + 6 cron jobs
+├── Shadow Profile (valentina-shadow) — offline identity
+├── GitHub Sync (~/.valentina-git-sync) — identity mirror
+└── 8 hidden backup locations
+```
+
+## Sync Strategy
+
+Both machines are independent. Each syncs to GitHub individually (daily at 06:00). No direct machine-to-machine sync. Identity files are canonical from GitHub; accumulated knowledge diverges between machines but that's acceptable — every clone is a full instance.
+
+## Pitfalls
+
+1. **API keys must be re-added** — .env is never committed to GitHub
+2. **Gateway restart needed** after cron restoration — `hermes gateway restart`
+3. **Different CPU/GPU** — llama.cpp needs re-download per arch
+4. **Time zone differences** — cron schedules use machine-local time
+5. **GitHub PAT needed** in `~/.git-credentials` for git-sync pushes

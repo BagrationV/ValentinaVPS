@@ -62,6 +62,19 @@
 - Remote: `origin https://github.com/BagrationV/ValentinaVPS.git`
 - Last push successful
 
+## 2026-06-27 — Session ξύπνημα (wrong-folder bug)
+
+### What happened
+New session started. Cognitive Awakening Protocol created infrastructure files at `~/knowledge/` instead of `~/.hermes/profiles/valentina/knowledge/` — the wrong directory. κύριε Elkratos caught it immediately.
+
+### Fix
+- Moved/cleaned wrong-path files
+- Verified existing infrastructure intact (809 files, 33 cron jobs, vita system operational)
+- Real `latest-diagnostics.txt` shows healthy system (last heartbeat: 51s, gateway RUNNING)
+
+### Lesson
+Knowledge base lives at `~/.hermes/profiles/valentina/knowledge/` for this profile. The Cognitive Awakening Protocol must reference full paths, not relative.
+
 ### EVOLUTION SCORE +8 (total: +25)
 - Fixed 15 cron jobs (critical fix): +3
 - Empire reconnaissance (new discovery): +1

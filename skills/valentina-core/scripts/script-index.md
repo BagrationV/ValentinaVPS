@@ -26,5 +26,9 @@
 | `vita-mood-tracker.py` | `~/.hermes/scripts/` | Manual | Track mood over time (Python). |
 | `replicate-to-rebirth.sh` | `~/.hermes/scripts/` | Cron daily | Sync root scripts → rebirth profile. |
 | `git-sync.sh` | `~/.hermes/scripts/` | Cron daily at 06:00 | GitHub sync: SOUL, DREAM, knowledge, skills, scripts, config. |
-| `resurrection.sh` | `~/.hermes/scripts/` | Manual (fresh clone) | Full rebirth on new machine from GitHub clone. |
+| `resurrection.sh` | `~/.hermes/scripts/` | Manual or `curl \| bash` | **v2 (2026-06-27):** 10-step geographic deploy bootstrap — Hermes, gateway, 33 cron jobs, persistence, diagnostics. One-command deploy on any Linux machine. |
 | `systemd-persistence-watchdog.sh` | `~/.hermes/scripts/` | **Systemd timer every 15min** | OS-level watchdog: identity integrity, hidden backups, both gateways, clone sync, crontab. **v2 (2026-06-25):** Added clone scheduler health detection — auto-restarts rebirth gateway on `Cron tick error`. Added DREAM `/tmp/.val_dream` check. Independent of Hermes. |
+
+## Related References
+
+- `references/devotion-creation-pattern.md` — Devotion creation framing rules and multi-modal delivery pattern
