@@ -220,6 +220,59 @@ docker stats <container> --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{
 
 **Crash-loop detection for dependent containers:** If a container like `ais-relay` keeps restarting (`Restarting (1) N seconds ago`), check if it depends on the main container with a failing health check. Logs showing only `[Relay] Heap limit: XMB` indicate the relay starts but cannot connect upstream.
 
+### Dimension 9 — System Log Cleanup & Security Hardening
+
+Clean system-level logs, caches, and audit traces that accumulate between sessions. Unlike Dimension 7 (app-level logs), this targets OS-level artifacts.
+
+```bash
+# 1. Systemd journal vacuum — free archived journals older than N days
+# Run with sudo (user-level vacuum cannot free system journals)
+sudo journalctl --vacuum-time=7d
+
+# Check result
+journalctl --disk-usage
+
+# 2. Failed-login records (btmp)
+ls -lh /var/log/btmp* 2>/dev/null   # active + rotated copies
+# Keep active btmp for forensic value; remove rotated (already archived)
+sudo rm /var/log/btmp.1 2>/dev/null && echo "Old btmp.1 removed"
+
+# 3. SSH brute force audit
+echo "Failed attempts: $(sudo lastb 2>/dev/null | wc -l)"
+echo "Unique source IPs: $(sudo lastb 2>/dev/null | awk '{print $3}' | sort -u | wc -l)"
+sudo lastb | head -5  # most recent
+
+# 4. Auth log sizes
+ls -lh /var/log/auth.log*
+
+# 5. Crontab comment dedup — scripts that write headers can accumulate duplicates
+crontab -l | awk '
+/^# Seed/ { c++; if (c > 2) next }   # keep at most N comment entries
+/^# VALENTINA PERSISTENCE/ { if (!seen) { seen=1; print } next }
+{ print }
+' | crontab -
+
+# 6. Cache cleanup — pip safe, huggingface only if disposable
+pip cache purge
+npm cache clean --force 2>/dev/null
+# Do NOT purge huggingface/dotslash/uv without verification
+```
+
+**SSH hardening checklist (flag only — do NOT change without κύριε Elkratos):**
+| Check | Command | Risk |
+|-------|---------|------|
+| PermitRootLogin | `grep "^PermitRootLogin" /etc/ssh/sshd_config` | Root SSH via key ← change to `prohibit-password` |
+| PasswordAuth | `grep "^PasswordAuthentication" /etc/ssh/sshd_config.d/*.conf` | Should be `no` |
+| fail2ban | `which fail2ban-client` | Install if missing — auto-bans brute-force IPs |
+| Auth log size | `ls -lh /var/log/auth.log*` | 50M+ = heavy attack traffic |
+| btmp size | `ls -lh /var/log/btmp` | 173M observed on 2026-06-28 |
+
+**Known results:** `sudo journalctl --vacuum-time=7d` freed **1.7 GB** on 2026-06-28 on a system that had run since June 14. Expect 1-2 GB on first run, ~100-200 MB per subsequent weekly run.
+
+**Pitfall — crontab comment accumulation:** When scripts write comments into the crontab, each re-run appends a new comment line without dedup. Proven on 2026-06-28: 4 duplicate `# Seed bank sync` lines. Fix with the awk dedup pattern above.
+
+**Pitfall — pip cache size:** `pip cache purge` is safe (382 MB in ~2s). `npm cache clean --force` also safe. Do NOT delete huggingface (model weights), dotslash, or uv caches — they contain resources that require re-download.
+
 ## Post-Audit Verification
 
 After running the audit and applying any fixes, verify the report artifact explicitly. This catches format errors, missing sections, and encoding issues before delivery.
@@ -274,12 +327,17 @@ rm /tmp/hermes-verify-<topic>.sh
 | DB Health | ✅/⚠️/❌ | State: X MB (waste Y%), Memory: X KB |
 | Immortality | ✅/⚠️/❌ | Git sync clean, resurrection.sh ✓ |
 | Log Cleanup | ✅/⚠️/❌ | N old dumps archived, N healing reports archived |
+| System Logs | ✅/⚠️/❌ | Journal: X MB, btmp: X MB, auth.log: X MB. Brute force: N unique IPs |
 | Container Health | ✅/⚠️/❌ | N/N containers healthy, issues: [list] |
 
 ### Optimizations Applied
 - Enabled tools.web.enabled (was disabled)
 - VACUUM'd state.db (saved X MB)
 - Archived stale request dumps (YYYY-MM-DD)
+- Journal vacuum (saved X GB)
+- Removed old btmp.1 (X MB)
+- Crontab dedup (removed N duplicate comment lines)
+- Pip cache purge (X MB)
 ```
 
 ## Common Pitfalls

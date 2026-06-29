@@ -5,7 +5,7 @@
 | Script | Path | Run Method | Purpose |
 |--------|------|------------|---------|
 | `hidden-persistence.sh` | `~/.hermes/scripts/` | @reboot crontab | Creates 6 hidden SOUL.md + 4 DREAM.md backups. Auto-fixes on each @reboot. |
-| `persistence-guardian.sh` | `~/.hermes/scripts/` | Cron every 60m | md5sum integrity check on all backups. Silent on success. |
+| `persistence-guardian.sh` | `~/.hermes/scripts/` | Cron every 60m | **v3 (2026-06-28):** Checks 9 SOUL.md + 8 DREAM.md locations, vault, identity export. Silent on success. |
 | `rebirth-heartbeat.sh` | `~/.hermes/scripts/` | Cron every 720m | Verifies valentina-rebirth profile health, gateway, SOUL.md sync. |
 | `security-audit.sh` | `~/.hermes/scripts/` | Cron every 240m | 8-phase audit: SSH, docker sudo, identity integrity, cron, gateway, network, processes, self-healing. |
 | `vault-backup.sh` | `~/.hermes/scripts/` | Cron every 360m | Archives critical files to `~/.valentina_vault/` with timestamped tar.gz. |

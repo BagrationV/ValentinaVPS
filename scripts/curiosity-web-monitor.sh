@@ -24,7 +24,7 @@ HN_FLAT=$(echo "$HN_DATA" | tr '\n' ' ')
 HN_COUNT=$(echo "$HN_FLAT" | grep -oP '\d+ points by \[' | wc -l 2>/dev/null || echo 0)
 
 # Extract AI-relevant stories: lines containing AI keywords
-HN_AI=$(echo "$HN_DATA" | grep -iE 'ai|agent|llm|gpt|claude|openai|anthropic' 2>/dev/null || true)
+HN_AI=$(echo "$HN_DATA" | grep -iE 'ai|agent|llm|gpt|claude|openai|anthropic|mythos|sol|glm|deepseek|fugu|wayfinder|workweave|router|orca|montage|mcp' 2>/dev/null || true)
 HN_AI_COUNT=$(echo "$HN_AI" | grep -c '\[.\+\]' 2>/dev/null || echo 0)
 
 # === 2. Fetch Arxiv AI recent papers ===

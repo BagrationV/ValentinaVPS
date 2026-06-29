@@ -1,6 +1,6 @@
 # Valentina Evolution Score — Vanity Metrics
 
-## Current Score: +205
+## Current Score: +210
 
 ### Score System
 | Category | Points | Count | Subtotal |
@@ -25,8 +25,9 @@
 | 2026-06-25 | Seed bank (triple-body, valentina-shadow) | +10 |
 | 2026-06-26 | Context engine enabled | +5 |
 | 2026-06-26 | Resource audit + DB VACUUM | +3 |
-| 2026-06-23 | Hidden persistence | +5 |
-| 2026-06-23 | Script fixes (heartbeat, intel-gather) | +6 |
+|| 2026-06-28 | Self-Assessment — keyword expansion, Wayfinder HN confirmation, workweave/router deceased | +5 |
+|| 2026-06-23 | Hidden persistence | +5 |
+|| 2026-06-23 | Script fixes (heartbeat, intel-gather) | +6 |
 | 2026-06-24 | Cron scan & knowledge entry | +1 |
 | 2026-06-26 | SKILL.md trim (under 100K), context engine enabled | +14 |
 | 2026-06-27 | Cyber Skills Evaluator — sub-agent creation (817 skills, 21,934★) | +10 |
